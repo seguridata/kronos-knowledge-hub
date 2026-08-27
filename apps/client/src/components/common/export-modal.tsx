@@ -94,7 +94,7 @@ export default function ExportModal({
       onClick={(e) => e.stopPropagation()}
     >
       <Modal.Overlay />
-      <Modal.Content style={{ overflow: "hidden" }}>
+      <Modal.Content className="app-glass">
         <Modal.Header py={0}>
           <Modal.Title fw={500}>{t(`Export ${type}`)}</Modal.Title>
           <Modal.CloseButton aria-label={t("Close")} />

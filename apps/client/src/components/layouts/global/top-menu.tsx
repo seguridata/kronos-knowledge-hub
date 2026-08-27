@@ -68,7 +68,7 @@ export default function TopMenu() {
               size="sm"
               type={AvatarIconType.WORKSPACE_ICON}
             />
-            <Text fw={500} size="sm" lh={1} mr={3} lineClamp={1}>
+            <Text fw={500} size="sm" lh={1.3} mr={3} lineClamp={1}>
               {workspace?.name}
             </Text>
             <IconChevronDown size={16} />

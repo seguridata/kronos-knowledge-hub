@@ -1,8 +1,16 @@
+import "@fontsource/poppins/latin-400.css";
+import "@fontsource/poppins/latin-500.css";
+import "@fontsource/poppins/latin-600.css";
+import "@fontsource/poppins/latin-700.css";
 import "@mantine/core/styles.css";
 import "@mantine/spotlight/styles.css";
 import "@mantine/notifications/styles.css";
 import '@mantine/dates/styles.css';
 import "@/styles/a11y-overrides.css";
+import "@/styles/motion.css";
+import "@/styles/wallpaper.css";
+import "@/styles/theme-transition.css";
+import "@/styles/skeleton.css";
 
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";

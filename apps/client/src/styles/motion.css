@@ -1,0 +1,151 @@
+/*
+ * SeguriData motion system. Timings follow Emil Kowalski's animations.dev:
+ *   - ease-out for enter/exit
+ *   - ease-in-out for on-screen movement
+ *   - ease for hover/color
+ *   - 100-200ms micro, never above 300ms in product chrome
+ * Animate transform/opacity only. Disabled under prefers-reduced-motion.
+ */
+
+:root {
+  --app-ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --app-ease-move: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --app-duration-micro: 120ms;
+  --app-duration-ui: 180ms;
+  --app-duration-route: 220ms;
+  /* Gaussian frost: blur melts the backdrop, saturate keeps it from going grey. */
+  --app-glass-blur: blur(16px) saturate(160%);
+}
+
+.app-glass {
+  isolation: isolate;
+  background: light-dark(rgba(255, 255, 255, 0.88), rgba(14, 16, 14, 0.84));
+  border: 1px solid light-dark(rgba(25, 37, 22, 0.1), rgba(255, 255, 255, 0.14));
+  box-shadow:
+    inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.12)),
+    0 18px 48px light-dark(rgba(24, 35, 17, 0.12), rgba(0, 0, 0, 0.45));
+  backdrop-filter: var(--app-glass-blur);
+  -webkit-backdrop-filter: var(--app-glass-blur);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .app-glass {
+    background: light-dark(#fff, #191919) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .app-glass {
+    background: light-dark(#f6f8f4, #191919) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+.app-pressable {
+  transition: transform var(--app-duration-micro) var(--app-ease-out);
+}
+
+.app-pressable:active {
+  transform: scale(0.97);
+}
+
+a,
+button,
+[role="button"],
+.mantine-NavLink-root,
+.mantine-UnstyledButton-root {
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.app-bezel {
+  padding: 5px;
+  border-radius: 1.35rem;
+  background: light-dark(rgba(25, 37, 22, 0.035), rgba(255, 255, 255, 0.035));
+  border: 1px solid light-dark(rgba(25, 37, 22, 0.07), rgba(255, 255, 255, 0.08));
+  box-shadow: inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.06));
+}
+
+.app-bezel > * {
+  border-radius: calc(1.35rem - 5px);
+}
+
+@keyframes app-route-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::view-transition-old(root) {
+  animation: 160ms var(--app-ease-out) both fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 200ms var(--app-ease-out) both fade-in;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Film grain only as a fixed overlay — never on scrolling content. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.02;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-pressable:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-pressable,
+  .app-pressable:active,
+  .app-pressable:hover,
+  a,
+  button,
+  [role="button"],
+  .mantine-NavLink-root,
+  .mantine-UnstyledButton-root {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body::after {
+    display: none;
+  }
+}

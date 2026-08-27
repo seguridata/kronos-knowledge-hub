@@ -40,8 +40,8 @@ export default function SpaceSettingsModal({
         xOffset={0}
         mah={400}
       >
-        <Modal.Overlay />
-        <Modal.Content style={{ overflow: "hidden" }}>
+        <Modal.Overlay blur={12} backgroundOpacity={0.5} color="#050505" />
+        <Modal.Content className="app-glass">
           <Modal.Header py={0}>
             <Modal.Title>
               <Text fw={500} lineClamp={1}>

@@ -28,7 +28,7 @@ export default function TemplatePreviewModal({
   return (
     <Modal.Root size={1200} opened={opened} onClose={onClose} aria-label={title}>
       <Modal.Overlay />
-      <Modal.Content style={{ overflow: "hidden" }}>
+      <Modal.Content className="app-glass">
         <Modal.Header>
           <Modal.Title>
             <Group gap="xs">

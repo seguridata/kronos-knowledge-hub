@@ -81,12 +81,21 @@ export default function GlobalAppShell({
   const isAiRoute = location.pathname.startsWith("/ai");
   const isPageRoute = location.pathname.includes("/p/");
   const showGlobalSidebar = !isSpaceRoute && !isSettingsRoute && !isAiRoute;
+  const [routeEnter, setRouteEnter] = useState(0);
+  const previousPath = useRef(location.pathname);
+
+  useEffect(() => {
+    if (previousPath.current === location.pathname) return;
+    previousPath.current = location.pathname;
+    if (isPageRoute) return;
+    setRouteEnter((value) => value + 1);
+  }, [location.pathname, isPageRoute]);
 
   return (
     <>
       <SkipToMain />
       <AppShell
-      header={{ height: 45 }}
+      header={{ height: 56 }}
       navbar={{
         width: isSpaceRoute ? sidebarWidth : 300,
         breakpoint: "sm",
@@ -129,7 +138,12 @@ export default function GlobalAppShell({
         {isAiRoute && <AiChatSidebar />}
         {showGlobalSidebar && <GlobalSidebar />}
       </AppShell.Navbar>
-      <AppShell.Main id={MAIN_CONTENT_ID} tabIndex={-1}>
+      <AppShell.Main
+        id={MAIN_CONTENT_ID}
+        tabIndex={-1}
+        className={classes.main}
+        data-enter={isPageRoute ? undefined : String(routeEnter)}
+      >
         {isSettingsRoute ? (
           <Container size={900} pb={80}>
             {children}

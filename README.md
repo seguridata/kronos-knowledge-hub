@@ -1,62 +1,154 @@
-<div align="center">
-    <h1><b>Docmost</b></h1>
-    <p>
-        Open-source collaborative wiki and documentation software.
-        <br />
-        <a href="https://docmost.com"><strong>Website</strong></a> | 
-        <a href="https://docmost.com/docs"><strong>Documentation</strong></a> |
-        <a href="https://twitter.com/DocmostHQ"><strong>Twitter / X</strong></a>
-    </p>
-</div>
-<br />
+# Seguridata (Kronos document ledger)
 
-## Getting started
+Wiki colaborativa self-hosted para conocimiento empresarial. Fork de [Docmost](https://github.com/docmost/docmost) con marca Seguridata y una capa propia (**Kronos**) para capacidades que no dependen de la licencia Enterprise de Docmost (por ahora, persistencia y listado de audit logs).
 
-To get started with Docmost, please refer to our [documentation](https://docmost.com/docs) or try our [cloud version](https://docmost.com/pricing) .
+| Servicio | URL |
+| --- | --- |
+| App (Vite, desarrollo) | http://127.0.0.1:3011 |
+| API + collab + websockets | http://127.0.0.1:3010 |
+| Health | http://127.0.0.1:3010/api/health |
+| Primer workspace | http://127.0.0.1:3011/setup/register |
+| Login | http://127.0.0.1:3011/login |
 
-## Features
+## Requisitos
 
-- Real-time collaboration
-- Diagrams (Draw.io, Excalidraw and Mermaid)
-- Spaces
-- Permissions management
-- Groups
-- Comments
-- Page history
-- Search
-- File attachments
-- Embeds (Airtable, Loom, Miro and more)
-- Translations (10+ languages)
+- [Node.js](https://nodejs.org/) 22 o superior
+- [pnpm](https://pnpm.io/) 10.4.0 (`corepack enable` y `corepack prepare pnpm@10.4.0 --activate`)
+- Docker (Postgres 18 y Redis 8)
+- `openssl` para generar `APP_SECRET`
 
-### Screenshots
+En este repo Docker publica **Postgres en 5433** y **Redis en 6380** para no chocar con instancias locales en 5432/6379.
 
-<p align="center">
-<img alt="home" src="https://docmost.com/screenshots/home.png" width="70%">
-<img alt="editor" src="https://docmost.com/screenshots/editor.png" width="70%">
-</p>
+## Paso a paso: desarrollo local
 
-### License
-Docmost core is licensed under the open-source AGPL 3.0 license.  
-Enterprise features are available under an enterprise license (Enterprise Edition).  
+Usa este flujo si trabajas en Linux, macOS, o **WSL con el código en el disco Linux** (`~/…`, no `/mnt/c`).
 
-All files in the following directories are licensed under the Docmost Enterprise license defined in `packages/ee/License`.
-  - apps/server/src/ee
-  - apps/client/src/ee
-  - packages/ee
+### 1. Clonar e instalar
 
-### Contributing
+```bash
+git clone <url-de-este-repo> kronos-document-ledger
+cd kronos-document-ledger
+pnpm install
+```
 
-See the [development documentation](https://docmost.com/docs/self-hosting/development)
+### 2. Variables de entorno
 
-## Thanks
-Special thanks to;
+```bash
+cp .env.example .env
+```
 
-<img width="100" alt="Crowdin" src="https://github.com/user-attachments/assets/a6c3d352-e41b-448d-b6cd-3fbca3109f07" />
+Edita `.env`:
 
-[Crowdin](https://crowdin.com/) for providing access to their localization platform.
+1. Genera un secreto de al menos 32 caracteres:
 
+   ```bash
+   openssl rand -hex 32
+   ```
 
-<img width="48" alt="Algolia-mark-square-white" src="https://github.com/user-attachments/assets/6ccad04a-9589-4965-b6a1-d5cb1f4f9e94" />
+   Pégalo en `APP_SECRET`.
 
-[Algolia](https://www.algolia.com/) for providing full-text search to the docs.
+2. Copia usuario, contraseña y base de `docker-compose.yml` (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`) a `DATABASE_URL`. El host y el puerto publicados son `127.0.0.1:5433`.
 
+   ```
+   DATABASE_URL="postgresql://docmost:<POSTGRES_PASSWORD>@127.0.0.1:5433/docmost"
+   REDIS_URL=redis://127.0.0.1:6380
+   APP_URL=http://localhost:3010
+   PORT=3010
+   ```
+
+No dejes `APP_SECRET=REPLACE_WITH_LONG_SECRET` ni `CHANGE_ME` en la URL de Postgres: el servidor no arranca.
+
+### 3. Base de datos y Redis
+
+Desde la raíz del repo:
+
+```bash
+docker compose up -d
+docker compose ps
+```
+
+Espera a que `db` y `redis` estén `Up`. Las migraciones de Postgres las aplica Nest al arrancar.
+
+### 4. Arrancar API y cliente
+
+```bash
+pnpm run dev
+```
+
+Eso levanta en paralelo:
+
+- frontend Vite en `127.0.0.1:3011` (`pnpm run client:dev`)
+- API Nest en el puerto `3010` (`pnpm run server:dev`)
+
+La colaboración en tiempo real va en el mismo proceso de Nest (`/collab`). Vite reenvía `/api`, `/socket.io` y `/collab` a `APP_URL`.
+
+### 5. Comprobar
+
+```bash
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3010/api/health
+```
+
+Debe devolver `200`. Abre http://127.0.0.1:3011 — no el puerto 3010 — para usar la UI de desarrollo.
+
+### 6. Primer usuario
+
+Si la base está vacía, entra a http://127.0.0.1:3011/setup/register y crea el workspace. Después el login es http://127.0.0.1:3011/login.
+
+El audit log Kronos está en **Configuración → Audit log** (rol admin u owner, self-host).
+
+---
+
+## Windows + Docker en WSL
+
+Docker Desktop con el motor **dentro de WSL** no expone bien 5433/6380 al Node que corre en Windows (`ECONNREFUSED` / 502). Nest sobre `/mnt/c/...` además puede quedarse colgado en estado D.
+
+Haz esto:
+
+1. En WSL, clona o copia el repo al home Linux, por ejemplo `/home/<usuario>/kronos-document-ledger`.
+2. Ahí: `pnpm install`, `.env` como arriba, `docker compose up -d`.
+3. Arranca la API **en WSL, sobre ese directorio Linux**:
+
+   ```bash
+   cd ~/kronos-document-ledger
+   pnpm run server:dev
+   ```
+
+   Alternativa ya compilada:
+
+   ```bash
+   pnpm --filter ./apps/server run build
+   cd apps/server
+   NODE_ENV=development node dist/main.js
+   ```
+
+4. El cliente Vite puede ir en Windows o en WSL:
+
+   ```bash
+   pnpm run client:dev
+   ```
+
+   Con `APP_URL=http://localhost:3010`, el proxy de Vite llega a Nest en WSL (modo de red mirrored). Abre siempre http://127.0.0.1:3011.
+
+Si cambias código del servidor en Windows y Nest corre desde la copia Linux, vuelve a copiar `apps/server/dist` (o el fuente) y reinicia `node dist/main.js`.
+
+---
+
+## Comandos útiles
+
+| Comando | Qué hace |
+| --- | --- |
+| `pnpm run dev` | Cliente + API en desarrollo |
+| `pnpm run client:dev` | Solo Vite (`127.0.0.1:3011`) |
+| `pnpm run server:dev` | Solo Nest (`PORT`, por defecto 3010) |
+| `pnpm --filter ./apps/server run build` | Compila la API a `apps/server/dist` |
+| `pnpm run build` | Compila todo el monorepo |
+| `docker compose up -d` | Postgres 18 (5433) y Redis 8 (6380) |
+| `docker compose down` | Para db/redis (conserva volúmenes) |
+
+## Producción (Docker)
+
+`docker-compose.prod.yml` levanta app + Postgres + Redis. Sustituye `APP_SECRET`, `POSTGRES_PASSWORD` y `APP_URL` antes de usarlo. La imagen se construye con el `Dockerfile` de la raíz (`pnpm build` dentro).
+
+## Licencia
+
+El core (fork de Docmost) está bajo **AGPL 3.0**. Los directorios `apps/client/src/ee`, `apps/server/src/ee` y `packages/ee` siguen bajo la licencia Enterprise de Docmost. Kronos (`apps/server/src/kronos`, `apps/client/src/kronos`) es código propio de Seguridata sobre el core AGPL.

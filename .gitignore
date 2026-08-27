@@ -1,43 +1,140 @@
 .env
 .env.dev
 .env.prod
-data
-# compiled output
-dist
-/node_modules
 
-# Logs
-logs
+# Environment and secrets
+.env.*
+!.env.example
+*.local
+*.secret
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+bower_components/
+jspm_packages/
+/.pnp
+.pnp.js
+
+# Build output and caches
+dist/
+build/
+out/
+lib/
+tmp/
+temp/
+cache/
+.cache/
+.parcel-cache/
+.turbo/
+.next/
+.nuxt/
+.svelte-kit/
+.angular/
+.eslintcache
+.stylelintcache
+.nx/
+.nx/installation/
+.nx/cache/
+
+# Project data
+data/
+
+# compiled output
+coverage/
+/.nyc_output/
+
+# Logs and reports
+logs/
 *.log
+*.log.*
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# OS
+# Test artifacts
+test-results/
+playwright-report/
+blob-report/
+
+# OS generated files
 .DS_Store
-
-# Tests
-/coverage
-/.nyc_output
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
 # IDEs and editors
-/.idea
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .project
 .classpath
 .c9/
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# Local configuration
+*.local.json
+*.local.yml
+*.local.yaml
 
-.nx
-.nx/installation
-.nx/cache
+# Databases and local storage
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+
+# TypeScript and generated files
+*.tsbuildinfo
+*.d.ts.map
+
+# Docker and deployment overrides
+docker-compose.override.yml
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+*~
+
+# Package manager files
+.npm/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+!.yarnrc.yml
+
+# Miscellaneous
+.history/
+.local/
+.serverless/
+.vercel/
+.netlify/
+.firebase/
+*.pid
+*.pid.lock
+*.playwright-mcp
+.vscode
+Onlyreference
+.env.*
+*.code-workspace
+*.ico
+.claude

@@ -1,34 +1,56 @@
 .root {
-    height: 34px;
-    padding-left: var(--mantine-spacing-sm);
-    padding-right: 4px;
-    border-radius: var(--mantine-radius-md);
+    display: flex;
+    align-items: center;
+    min-width: 280px;
+    height: 38px;
+    padding-left: 12px;
+    padding-right: 6px;
+    border-radius: 999px;
     color: var(--mantine-color-placeholder);
     border: 1px solid;
+    transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
 
     @mixin light {
-        border-color: var(--mantine-color-gray-3);
-        background-color: var(--mantine-color-white);
+        border-color: rgba(25, 37, 22, 0.1);
+        background-color: rgba(255, 255, 255, 0.72);
     }
 
     @mixin dark {
-        border-color: var(--mantine-color-dark-4);
-        background-color: var(--mantine-color-dark-6);
+        border-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    @mixin hover {
+        border-color: color-mix(in oklch, var(--app-accent-green) 40%, transparent);
+        box-shadow: 0 8px 20px light-dark(rgba(24, 35, 17, 0.06), rgba(0, 0, 0, 0.22));
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--app-accent-green);
+        outline-offset: 2px;
     }
 
     @mixin rtl {
-        padding-left: 4px;
-        padding-right: var(--mantine-spacing-sm);
+        padding-left: 6px;
+        padding-right: 12px;
     }
+}
+
+.placeholder {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .shortcut {
     font-size: 11px;
     line-height: 1;
-    padding: 4px 7px;
-    border-radius: var(--mantine-radius-sm);
+    padding: 5px 8px;
+    border-radius: 999px;
     border: 1px solid;
-    font-weight: bold;
+    letter-spacing: 0.02em;
     white-space: nowrap;
     flex-shrink: 0;
 

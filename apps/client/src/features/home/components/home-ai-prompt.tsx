@@ -39,19 +39,13 @@ export default function HomeAiPrompt() {
 
   return (
     <div className={classes.wrapper}>
-      <h1 className={classes.heading}>
-        {t("Welcome to {{name}}", { name: workspace?.name ?? "Docmost" })}
-      </h1>
-      <div className={classes.subtitle}>
-        {t("Ask anything or search your workspace")}
-      </div>
-
+      <div className={classes.kicker}>{t("Ask the knowledge base")}</div>
       <div className={classes.inputContainer}>
         <ChatInput
           isStreaming={false}
           onSend={handleSend}
           onStop={() => {}}
-          placeholder={t("Ask anything... Use @ to mention pages")}
+          placeholder={t("Ask a question. Use @ to mention pages.")}
           autofocus={false}
         />
       </div>

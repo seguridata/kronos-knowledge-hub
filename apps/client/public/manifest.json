@@ -1,10 +1,10 @@
 {
-  "name": "Docmost",
-  "short_name": "Docmost",
+  "name": "Seguridata",
+  "short_name": "Seguridata",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#222",
-  "theme_color": "#222",
+  "background_color": "#191919",
+  "theme_color": "#191919",
   "icons": [
     {
       "src": "icons/favicon-16x16.png",

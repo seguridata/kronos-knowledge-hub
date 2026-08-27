@@ -1,27 +1,69 @@
+.bezel {
+  width: 236px;
+  padding: 5px;
+  border-radius: 1.35rem;
+  background: light-dark(rgba(25, 37, 22, 0.04), rgba(255, 255, 255, 0.04));
+  border: 1px solid light-dark(rgba(25, 37, 22, 0.07), rgba(255, 255, 255, 0.08));
+  transition: transform 180ms var(--app-ease-out, cubic-bezier(0.215, 0.61, 0.355, 1));
+}
+
 .card {
-  background-color: var(--mantine-color-body);
-  width: 220px;
+  background-color: light-dark(#fff, var(--mantine-color-dark-7));
+  height: 100%;
+  border: 1px solid light-dark(rgba(25, 25, 25, 0.06), rgba(255, 255, 255, 0.08));
+  box-shadow: inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.05));
+  transition: box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease;
 
   @mixin hover {
-    box-shadow: var(--mantine-shadow-xs);
-    transform: scale(1.02);
+    border-color: color-mix(in oklch, var(--app-accent-green) 35%, transparent);
+    box-shadow: light-dark(0 10px 24px rgba(24, 35, 17, 0.08), 0 12px 28px rgba(0, 0, 0, 0.32));
   }
 
   &:focus-visible {
-    outline: 2px solid var(--mantine-primary-color-filled);
+    outline: 2px solid var(--app-accent-green);
     outline-offset: 2px;
   }
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .bezel:hover {
+    transform: translateY(-3px);
+  }
+}
+
 .cardSection {
-  background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+  background: linear-gradient(
+    135deg,
+    light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6)) 0%,
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5)) 100%
+  );
+  position: relative;
+  overflow: hidden;
+
+  /* A hairline brand-green thread along the top edge — the "verde valida"
+   * 10% accent, applied as a 2px line rather than a fill so it stays subtle
+   * across every space card banner. */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--app-accent-green);
+    opacity: 0.55;
+  }
 }
 
 .title {
-  font-family:
-          Greycliff CF,
-          var(--mantine-font-family);
+  font-family: var(--mantine-font-family);
+  letter-spacing: -0.02em;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.description {
+  min-height: 2.1em;
+  line-height: 1.4;
 }

@@ -1,0 +1,51 @@
+/*
+ * SeguriData theme transition: smooths the light/dark color scheme switch
+ * (triggered via Mantine's useMantineColorScheme/setColorScheme in
+ * theme-toggle.tsx, which toggles the data-mantine-color-scheme attribute)
+ * so surfaces cross-fade instead of snapping instantly.
+ *
+ * Scoped to root/layout/surface elements only - deliberately excludes
+ * inputs, textareas, contenteditable regions, and the editor content area
+ * so typing and the caret never feel like they're transitioning, and
+ * excludes `*` so scroll-driven repaints aren't forced to animate.
+ * 200ms ease matches the short, restrained timing used elsewhere in
+ * motion.css (100-200ms, never above 300ms).
+ */
+
+html,
+body,
+#root,
+.mantine-AppShell-root,
+.mantine-AppShell-header,
+.mantine-AppShell-navbar,
+.mantine-AppShell-aside,
+.mantine-AppShell-footer,
+.mantine-AppShell-main,
+.mantine-Paper-root,
+.mantine-Card-root,
+.mantine-Modal-content,
+.mantine-Drawer-content,
+.mantine-Menu-dropdown,
+.mantine-Popover-dropdown {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  #root,
+  .mantine-AppShell-root,
+  .mantine-AppShell-header,
+  .mantine-AppShell-navbar,
+  .mantine-AppShell-aside,
+  .mantine-AppShell-footer,
+  .mantine-AppShell-main,
+  .mantine-Paper-root,
+  .mantine-Card-root,
+  .mantine-Modal-content,
+  .mantine-Drawer-content,
+  .mantine-Menu-dropdown,
+  .mantine-Popover-dropdown {
+    transition: none !important;
+  }
+}

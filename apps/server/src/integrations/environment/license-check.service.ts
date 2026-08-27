@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { EnvironmentService } from './environment.service';
+import { KRONOS_FEATURES } from '../../kronos/kronos.features';
 
 @Injectable()
 export class LicenseCheckService {
@@ -37,6 +38,10 @@ export class LicenseCheckService {
       }
     }
 
+    if (KRONOS_FEATURES.includes(feature)) {
+      return true;
+    }
+
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const LicenseModule = require('../../ee/licence/license.service');
@@ -56,9 +61,9 @@ export class LicenseCheckService {
       const licenseService = this.moduleRef.get(LicenseModule.LicenseService, {
         strict: false,
       });
-      return licenseService.getFeatures(licenseKey);
+      return this.mergeSelfHostFeatures(licenseService.getFeatures(licenseKey));
     } catch {
-      return [];
+      return this.mergeSelfHostFeatures([]);
     }
   }
 
@@ -82,6 +87,14 @@ export class LicenseCheckService {
     }
 
     return this.getLicenseType(licenseKey) ?? 'free';
+  }
+
+  private mergeSelfHostFeatures(features: string[]): string[] {
+    if (this.environmentService.isCloud()) {
+      return features;
+    }
+
+    return [...new Set([...KRONOS_FEATURES, ...features])];
   }
 
   private getLicenseType(licenseKey: string): string | null {

@@ -11,7 +11,8 @@ import { getLicenseInfo } from "@/ee/licence/services/license-service.ts";
 import { getSsoProviders } from "@/ee/security/services/security-service.ts";
 import { getShares } from "@/features/share/services/share-service.ts";
 import { getApiKeys } from "@/ee/api-key";
-import { getAuditLogs } from "@/ee/audit/services/audit-service";
+import { listAuditLogs } from "@/kronos/audit/services/audit-service";
+import { KRONOS_AUDIT_QUERY_KEY } from "@/kronos/audit/queries/audit-query";
 import { getVerificationList } from "@/ee/page-verification/services/page-verification-service";
 import { getScimTokens } from "@/ee/scim/services/scim-token-service";
 
@@ -85,10 +86,10 @@ export const prefetchApiKeyManagement = () => {
 };
 
 export const prefetchAuditLogs = () => {
-  const params = { limit: 50 };
+  const params = { limit: 30 };
   queryClient.prefetchQuery({
-    queryKey: ["audit-logs", params],
-    queryFn: () => getAuditLogs(params),
+    queryKey: [KRONOS_AUDIT_QUERY_KEY, params],
+    queryFn: () => listAuditLogs(params),
   });
 };
 

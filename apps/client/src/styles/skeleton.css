@@ -1,0 +1,62 @@
+/*
+ * SeguriData skeleton shimmer: overrides Mantine's default Skeleton pulse
+ * (a 1.5s opacity fade, see @mantine/core Skeleton.module.css) with a slower,
+ * low-contrast gradient sweep. Kept deliberately restrained for a B2B
+ * enterprise tool — neutral gray tones only (no brand green), a soft sweep
+ * rather than a bright shine, and a gentle ease-in-out loop.
+ *
+ * Mantine renders both a hashed module class and a stable static class
+ * (`.mantine-Skeleton-root`) on every Skeleton; we target the static class
+ * so this survives @mantine/core version bumps. The pulsing highlight is
+ * Mantine's `::after` pseudo-element (data-animate); we replace its
+ * background and animation, and cancel the parent's own animation to avoid
+ * double motion.
+ */
+
+.mantine-Skeleton-root:where([data-animate])::after {
+  animation: sd-skeleton-shimmer 2s ease-in-out infinite;
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+}
+
+:where([data-mantine-color-scheme="light"]) .mantine-Skeleton-root:where([data-animate])::after {
+  background-image: linear-gradient(
+    100deg,
+    var(--mantine-color-gray-2) 30%,
+    var(--mantine-color-gray-3) 50%,
+    var(--mantine-color-gray-2) 70%
+  );
+}
+
+:where([data-mantine-color-scheme="dark"]) .mantine-Skeleton-root:where([data-animate])::after {
+  background-image: linear-gradient(
+    100deg,
+    var(--mantine-color-dark-5) 30%,
+    var(--mantine-color-dark-4) 50%,
+    var(--mantine-color-dark-5) 70%
+  );
+}
+
+@keyframes sd-skeleton-shimmer {
+  0% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mantine-Skeleton-root:where([data-animate])::after {
+    animation: none;
+    background-image: none;
+  }
+
+  :where([data-mantine-color-scheme="light"]) .mantine-Skeleton-root:where([data-animate])::after {
+    background-color: var(--mantine-color-gray-2);
+  }
+
+  :where([data-mantine-color-scheme="dark"]) .mantine-Skeleton-root:where([data-animate])::after {
+    background-color: var(--mantine-color-dark-5);
+  }
+}

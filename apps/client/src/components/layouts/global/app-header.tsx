@@ -54,11 +54,23 @@ export function AppHeader() {
 
   const isPageRoute = location.pathname.includes("/p/");
 
-  const items = links.map((link) => (
-    <Link key={link.label} to={link.link} className={classes.link}>
-      {t(link.label)}
-    </Link>
-  ));
+  const items = links.map((link) => {
+    const isActive =
+      location.pathname === link.link ||
+      (link.link === APP_ROUTE.HOME && location.pathname === "/");
+
+    return (
+      <Link
+        key={link.label}
+        to={link.link}
+        className={classes.link}
+        data-active={isActive || undefined}
+        aria-current={isActive ? "page" : undefined}
+      >
+        {t(link.label)}
+      </Link>
+    );
+  });
 
   return (
     <>
@@ -84,11 +96,11 @@ export function AppHeader() {
             />
           </Tooltip>
 
-          <Link to="/home" className={classes.brand} aria-label="Docmost">
+          <Link to="/home" className={classes.brand} aria-label="Seguridata">
             <Box hiddenFrom="sm" className={classes.brandIcon}>
               <img
                 src="/icons/favicon-32x32.png"
-                alt="Docmost"
+                alt="Seguridata"
                 width={22}
                 height={22}
               />
@@ -99,7 +111,7 @@ export function AppHeader() {
               style={{ userSelect: "none" }}
               visibleFrom="sm"
             >
-              Docmost
+              Seguridata
             </Text>
           </Link>
 

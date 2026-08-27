@@ -38,7 +38,7 @@ export class EnvironmentService {
   }
 
   getPort(): number {
-    return parseInt(this.configService.get<string>('PORT', '3000'));
+    return parseInt(this.configService.get<string>('PORT', '3010'));
   }
 
   getAppSecret(): string {

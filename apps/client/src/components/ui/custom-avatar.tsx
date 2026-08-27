@@ -60,14 +60,27 @@ export const CustomAvatar = React.forwardRef<
 
   const resolvedColor = variant === "filled" ? pickedColor : hue;
 
+  // Workspace and space logos are often non-square (e.g. wide wordmark lockups).
+  // Mantine's Avatar defaults to object-fit: cover, which crops/zooms into an
+  // arbitrary slice of such images. Use object-fit: contain for these types so
+  // the whole logo is visible, letterboxed within the circular frame. Plain user
+  // avatars are typically square already, so leave their cropping behavior as-is.
+  const isLogoType =
+    type === AvatarIconType.WORKSPACE_ICON || type === AvatarIconType.SPACE_ICON;
+
   const placeholderStyles =
     isInitials && variant !== "filled"
       ? {
-          placeholder: {
-            color: `var(--mantine-color-${hue}-9)`,
-          },
+          color: `var(--mantine-color-${hue}-9)`,
         }
       : undefined;
+
+  const avatarStyles = {
+    ...(placeholderStyles ? { placeholder: placeholderStyles } : undefined),
+    ...(isLogoType
+      ? { image: { objectFit: "contain" as const, padding: 2 } }
+      : undefined),
+  };
 
   return (
     <Avatar
@@ -77,7 +90,7 @@ export const CustomAvatar = React.forwardRef<
       alt={name}
       color={resolvedColor}
       variant={variant}
-      styles={placeholderStyles}
+      styles={avatarStyles}
       {...props}
     />
   );

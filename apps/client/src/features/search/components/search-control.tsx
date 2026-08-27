@@ -21,14 +21,18 @@ export function SearchControl({ className, ...others }: SearchControlProps) {
   const { t } = useTranslation();
 
   return (
-    <UnstyledButton {...others} className={cx(classes.root, className)}>
-      <Group gap="xs" wrap="nowrap">
-        <IconSearch style={{ width: rem(15), height: rem(15) }} stroke={1.5} />
-        <Text fz="sm" c="dimmed" pr={80}>
-          {t("Search")}
+    <UnstyledButton
+      {...others}
+      className={cx(classes.root, className)}
+      aria-label={t("Search workspace")}
+    >
+      <Group gap="xs" wrap="nowrap" w="100%">
+        <IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+        <Text fz="sm" c="dimmed" className={classes.placeholder}>
+          {t("Search knowledge")}
         </Text>
-        <Text fw={700} className={classes.shortcut}>
-          {platformModifierLabel} + K
+        <Text fw={600} className={classes.shortcut}>
+          {platformModifierLabel === "⌘" ? "⌘K" : "Ctrl+K"}
         </Text>
       </Group>
     </UnstyledButton>

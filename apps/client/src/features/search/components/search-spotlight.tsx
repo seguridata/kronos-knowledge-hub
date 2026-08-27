@@ -1,6 +1,6 @@
 import { Spotlight } from "@mantine/spotlight";
 import { IconSearch, IconSparkles } from "@tabler/icons-react";
-import { Group, Button, VisuallyHidden } from "@mantine/core";
+import { Group, Button, VisuallyHidden, Stack, Skeleton } from "@mantine/core";
 import React, { useState, useMemo, useEffect } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
@@ -120,7 +120,9 @@ export function SearchSpotlight({ spaceId }: SearchSpotlightProps) {
         onQueryChange={setQuery}
         scrollable
         overlayProps={{
-          backgroundOpacity: 0.55,
+          backgroundOpacity: 0.5,
+          blur: 12,
+          color: "#050505",
         }}
       >
         <Group gap="xs" px="sm" pt="sm" pb="xs">
@@ -196,6 +198,14 @@ export function SearchSpotlight({ spaceId }: SearchSpotlightProps) {
             <>
               {query.length === 0 && resultItems.length === 0 && (
                 <Spotlight.Empty>{t("Start typing to search...")}</Spotlight.Empty>
+              )}
+
+              {query.length > 0 && isLoading && resultItems.length === 0 && (
+                <Stack gap="xs" px="sm" py="xs">
+                  <Skeleton height={36} radius="sm" />
+                  <Skeleton height={36} radius="sm" />
+                  <Skeleton height={36} radius="sm" />
+                </Stack>
               )}
 
               {query.length > 0 && !isLoading && resultItems.length === 0 && (

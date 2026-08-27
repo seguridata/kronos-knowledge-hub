@@ -1,0 +1,39 @@
+/*
+ * App wallpaper: generated stills, not CSS orbs.
+ * light-dark() is a color function — do not use it for url().
+ */
+
+html,
+body,
+#root,
+.mantine-AppShell-root {
+  background-color: #101010;
+  background-image: url("/wallpapers/dark.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+html[data-mantine-color-scheme="light"],
+html[data-mantine-color-scheme="light"] body,
+html[data-mantine-color-scheme="light"] #root,
+html[data-mantine-color-scheme="light"] .mantine-AppShell-root {
+  background-color: #f7faf5;
+  background-image: url("/wallpapers/light.jpg");
+}
+
+.mantine-AppShell-root,
+.mantine-AppShell-main {
+  background-color: transparent !important;
+  background-image: none;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  html,
+  body,
+  #root,
+  .mantine-AppShell-root {
+    background-image: none;
+  }
+}

@@ -1,26 +1,40 @@
 import React from "react";
 import { Group, Text } from "@mantine/core";
 import classes from "./auth.module.css";
+import { IconLock, IconShieldCheck } from "@tabler/icons-react";
+import { getAppName } from "@/lib/config.ts";
 
 type AuthLayoutProps = {
   children: React.ReactNode;
 };
 
 export function AuthLayout({ children }: AuthLayoutProps) {
+  const appName = getAppName();
+
   return (
-    <>
+    <div className={classes.authPage}>
       <Group justify="center" gap={8} className={classes.logo}>
-        <img
-          src="/icons/favicon-32x32.png"
-          alt="Docmost"
-          width={22}
-          height={22}
-        />
+        <img src="/icons/favicon-32x32.png" alt={appName} width={22} height={22} />
         <Text size="28px" fw={700} style={{ userSelect: "none" }}>
-          Docmost
+          {appName}
         </Text>
       </Group>
-      <main>{children}</main>
-    </>
+      <div className={classes.authGrid}>
+        <section className={classes.story} aria-label="Product overview">
+          <div className={classes.storyEyebrow}>
+            <IconLock size={15} /> Knowledge ledger
+          </div>
+          <h1>The source of truth for the organization.</h1>
+          <p>
+            Policies, procedures, and decisions live in one governed workspace —
+            searchable, verifiable, and ready when you need them.
+          </p>
+          <div className={classes.storyFoot}>
+            <IconShieldCheck size={16} /> Private, self-hosted knowledge
+          </div>
+        </section>
+        <main>{children}</main>
+      </div>
+    </div>
   );
 }
