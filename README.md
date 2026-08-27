@@ -2,13 +2,13 @@
 
 Wiki colaborativa self-hosted para conocimiento empresarial. Fork de [Docmost](https://github.com/docmost/docmost) con marca Seguridata y una capa propia (**Kronos**) para capacidades que no dependen de la licencia Enterprise de Docmost (por ahora, persistencia y listado de audit logs).
 
-| Servicio | URL |
-| --- | --- |
-| App (Vite, desarrollo) | http://127.0.0.1:3011 |
-| API + collab + websockets | http://127.0.0.1:3010 |
-| Health | http://127.0.0.1:3010/api/health |
-| Primer workspace | http://127.0.0.1:3011/setup/register |
-| Login | http://127.0.0.1:3011/login |
+| Servicio                  | URL                                  |
+| ------------------------- | ------------------------------------ |
+| App (Vite, desarrollo)    | http://127.0.0.1:3011                |
+| API + collab + websockets | http://127.0.0.1:3010                |
+| Health                    | http://127.0.0.1:3010/api/health     |
+| Primer workspace          | http://127.0.0.1:3011/setup/register |
+| Login                     | http://127.0.0.1:3011/login          |
 
 ## Requisitos
 
@@ -129,21 +129,30 @@ Haz esto:
 
    Con `APP_URL=http://localhost:3010`, el proxy de Vite llega a Nest en WSL (modo de red mirrored). Abre siempre http://127.0.0.1:3011.
 
-Si cambias código del servidor en Windows y Nest corre desde la copia Linux, vuelve a copiar `apps/server/dist` (o el fuente) y reinicia `node dist/main.js`.
+Si cambias código del servidor en Windows y Nest corre desde la copia Linux, vuelve a copiar `apps/server/dist` (o el fuente) y reinicia `node dist/main.js`.\*\*
 
 ---
 
+## Un solo comando
+
+```bash
+pnpm dev:all
+```
+
+`scripts/dev.mjs` hace, en orden: valida `.env`, levanta Postgres y Redis y espera a que estén `healthy`, y arranca cliente + API (`pnpm run dev`). En esta máquina Docker vive dentro de WSL y el `docker.exe` de Windows no trae `compose`, así que el script corre la parte de infra como `wsl docker compose`. Si el daemon está apagado, en WSL: `sudo service docker start`.
+
 ## Comandos útiles
 
-| Comando | Qué hace |
-| --- | --- |
-| `pnpm run dev` | Cliente + API en desarrollo |
-| `pnpm run client:dev` | Solo Vite (`127.0.0.1:3011`) |
-| `pnpm run server:dev` | Solo Nest (`PORT`, por defecto 3010) |
-| `pnpm --filter ./apps/server run build` | Compila la API a `apps/server/dist` |
-| `pnpm run build` | Compila todo el monorepo |
-| `docker compose up -d` | Postgres 18 (5433) y Redis 8 (6380) |
-| `docker compose down` | Para db/redis (conserva volúmenes) |
+| Comando                                 | Qué hace                                        |
+| --------------------------------------- | ---------------------------------------------- |
+| `pnpm dev:all`                          | `.env` + infra (espera healthy) + cliente + API |
+| `pnpm infra:up`                         | Solo Postgres (5433) y Redis (6380)            |
+| `pnpm infra:down`                       | Para db/redis (conserva volúmenes)             |
+| `pnpm run dev`                          | Cliente + API en desarrollo                     |
+| `pnpm run client:dev`                   | Solo Vite (`127.0.0.1:3011`)                    |
+| `pnpm run server:dev`                   | Solo Nest (`PORT`, por defecto 3010)            |
+| `pnpm --filter ./apps/server run build` | Compila la API a `apps/server/dist`             |
+| `pnpm run build`                        | Compila todo el monorepo                        |
 
 ## Producción (Docker)
 
