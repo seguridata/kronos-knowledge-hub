@@ -58,3 +58,22 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # Fallback delivery for the production server while the GHCR package is
+      # private and the box has no registry credentials: ship the image as a
+      # build artifact that `gh run download` + `docker load` can consume.
+      # Once the package is public (or a read:packages token is on the server)
+      # this step and the artifact can be dropped in favour of `docker compose pull`.
+      - name: Export image tarball
+        run: |
+          docker pull "$IMAGE:latest"
+          docker save "$IMAGE:latest" | gzip > kronos-image.tar.gz
+          ls -lh kronos-image.tar.gz
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kronos-image
+          path: kronos-image.tar.gz
+          retention-days: 7
+          if-no-files-found: error
