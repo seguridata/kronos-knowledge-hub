@@ -8,7 +8,7 @@ body,
 #root,
 .mantine-AppShell-root {
   background-color: #101010;
-  background-image: url("/wallpapers/dark.jpg");
+  background-image: url("/wallpapers/dark.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -21,6 +21,23 @@ html[data-mantine-color-scheme="light"] #root,
 html[data-mantine-color-scheme="light"] .mantine-AppShell-root {
   background-color: #f7faf5;
   background-image: url("/wallpapers/light.jpg");
+}
+
+/* Mobile: lighter-weight wallpaper stills (_mb variants). */
+@media (max-width: 768px) {
+  html,
+  body,
+  #root,
+  .mantine-AppShell-root {
+    background-image: url("/wallpapers/dark_mb.jpg");
+  }
+
+  html[data-mantine-color-scheme="light"],
+  html[data-mantine-color-scheme="light"] body,
+  html[data-mantine-color-scheme="light"] #root,
+  html[data-mantine-color-scheme="light"] .mantine-AppShell-root {
+    background-image: url("/wallpapers/light_mb.jpg");
+  }
 }
 
 .mantine-AppShell-root,
