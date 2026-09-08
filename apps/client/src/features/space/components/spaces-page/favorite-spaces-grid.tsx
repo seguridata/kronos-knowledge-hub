@@ -45,7 +45,7 @@ export default function FavoriteSpacesGrid() {
             onMouseEnter={() =>
               prefetchSpace(fav.space!.slug, fav.space!.id)
             }
-            className={spaceClasses.card}
+            className={`${spaceClasses.card} app-glass-surface`}
             withBorder
           >
             <Card.Section className={spaceClasses.cardSection} h={40}>

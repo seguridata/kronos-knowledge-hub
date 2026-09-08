@@ -72,7 +72,7 @@ export default function SpaceCarousel() {
           component={Link}
           to={getSpaceUrl(space.slug)}
           onMouseEnter={() => prefetchSpace(space.slug, space.id)}
-          className={classes.card}
+          className={`${classes.card} app-glass-surface`}
           withBorder={false}
         >
           <Card.Section className={classes.cardSection} h={52} />

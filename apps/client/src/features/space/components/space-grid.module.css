@@ -1,5 +1,9 @@
 .card {
-    background-color: var(--mantine-color-body);
+    /* Frosted content surface — see .app-glass-surface in motion.css. */
+    background-color: light-dark(rgba(255, 255, 255, 0.66), rgba(20, 22, 20, 0.55));
+    backdrop-filter: var(--app-glass-blur);
+    -webkit-backdrop-filter: var(--app-glass-blur);
+    isolation: isolate;
     @mixin hover {
         box-shadow: var(--mantine-shadow-xs);
         transform: scale(1.02);
