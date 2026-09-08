@@ -85,7 +85,7 @@ export default function Home() {
         </title>
       </Helmet>
       <Container size="1100" className={classes.page} data-focus-mode={focusMode || undefined}>
-        <section className={classes.hero} aria-labelledby="home-title">
+        <section className={`${classes.hero} app-glass-surface`} aria-labelledby="home-title">
           <div className={classes.heroCopy}>
             <Group gap="xs" className={classes.eyebrow}>
               <span className={classes.statusDot} aria-hidden="true" />
@@ -161,7 +161,7 @@ export default function Home() {
 
         <Space h="xl" />
 
-        <section className={classes.activitySurface}>
+        <section className={`${classes.activitySurface} app-glass-surface`}>
           <div className={classes.sectionHeading}>
             <div>
               <Text className={classes.sectionKicker}>{t("Library")}</Text>

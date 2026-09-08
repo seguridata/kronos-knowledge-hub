@@ -44,6 +44,33 @@
   }
 }
 
+/*
+ * Content-surface glass: the same Gaussian frost token as .app-glass, applied
+ * to first-level content cards that sit directly over the wallpaper (space
+ * cards, the home activity panel). The translucent background + blur live on
+ * each surface's own rule (in its CSS module, so it reliably wins over
+ * Mantine's Card default); this class is only the shared kill-switch that
+ * drops the blur where the platform can't render it or the user opts out —
+ * mirroring how .app-glass degrades. Do NOT put it on nested boxes or on
+ * Select/Combobox dropdowns: stacked backdrop-filter layers make the text
+ * behind them unreadable (see the Combobox carve-out in theme.ts).
+ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .app-glass-surface {
+    background-color: light-dark(#fff, #191919) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .app-glass-surface {
+    background-color: light-dark(#f6f8f4, #191919) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
 .app-pressable {
   transition: transform var(--app-duration-micro) var(--app-ease-out);
 }

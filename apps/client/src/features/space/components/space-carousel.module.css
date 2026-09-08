@@ -8,7 +8,13 @@
 }
 
 .card {
-  background-color: light-dark(#fff, var(--mantine-color-dark-7));
+  /* Frosted content surface — see .app-glass-surface in motion.css. The
+   * carousel card sits on the near-transparent .bezel, so the wallpaper
+   * shows through the blur. */
+  background-color: light-dark(rgba(255, 255, 255, 0.66), rgba(20, 22, 20, 0.55));
+  backdrop-filter: var(--app-glass-blur);
+  -webkit-backdrop-filter: var(--app-glass-blur);
+  isolation: isolate;
   height: 100%;
   border: 1px solid light-dark(rgba(25, 25, 25, 0.06), rgba(255, 255, 255, 0.08));
   box-shadow: inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.05));
