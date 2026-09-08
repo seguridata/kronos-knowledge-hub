@@ -13,8 +13,10 @@
   --app-duration-micro: 120ms;
   --app-duration-ui: 180ms;
   --app-duration-route: 220ms;
-  /* Gaussian frost: blur melts the backdrop, saturate keeps it from going grey. */
-  --app-glass-blur: blur(16px) saturate(160%);
+  /* Gaussian frost: blur melts the backdrop; saturate + brightness keep it
+   * from going grey (Apple's iOS 26 "Liquid Glass" tuning is ~20-24px blur
+   * with a strong chroma boost). */
+  --app-glass-blur: blur(20px) saturate(180%) brightness(1.04);
 }
 
 .app-glass {
@@ -45,22 +47,58 @@
 }
 
 /*
- * Content-surface glass: the same Gaussian frost token as .app-glass, applied
- * to first-level content cards that sit directly over the wallpaper (space
- * cards, the home activity panel). The translucent background + blur live on
- * each surface's own rule (in its CSS module, so it reliably wins over
- * Mantine's Card default); this class is only the shared kill-switch that
- * drops the blur where the platform can't render it or the user opts out —
- * mirroring how .app-glass degrades. Do NOT put it on nested boxes or on
+ * Content-surface glass — the "regular material" of the app: first-level
+ * cards and panels that sit directly over the wallpaper (space cards, the
+ * home activity panel). Recipe, in layers:
+ *   1. a translucent tint (lighter than .app-glass — these are large and
+ *      the wallpaper should read through them)
+ *   2. the shared Gaussian frost token (blur + saturate + brightness)
+ *   3. a specular edge: a hairline light border + an inset top highlight,
+ *      so the glass has a crisp rim the eye can track in low contrast
+ *   4. a two-step ambient shadow (close contact + soft cast) for elevation
+ *   5. a barely-there fractal-noise film (::after) to kill blur banding and
+ *      give the material a physical, non-plasticky feel
+ * Applied via a plain class (`app-glass-surface`) added next to each
+ * surface's own module class. Do NOT put it on nested boxes or on
  * Select/Combobox dropdowns: stacked backdrop-filter layers make the text
  * behind them unreadable (see the Combobox carve-out in theme.ts).
  */
+.app-glass-surface {
+  position: relative;
+  isolation: isolate;
+  background-color: light-dark(rgba(255, 255, 255, 0.6), rgba(18, 20, 18, 0.46));
+  backdrop-filter: var(--app-glass-blur);
+  -webkit-backdrop-filter: var(--app-glass-blur);
+  border: 1px solid light-dark(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.1));
+  box-shadow:
+    inset 0 1px 0 0 light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.14)),
+    inset 0 0 0 1px light-dark(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.03)),
+    0 2px 8px light-dark(rgba(20, 30, 15, 0.05), rgba(0, 0, 0, 0.24)),
+    0 18px 44px light-dark(rgba(20, 30, 15, 0.1), rgba(0, 0, 0, 0.42));
+}
+
+.app-glass-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  /* light-dark() is <color>-only, so opacity can't switch on scheme here;
+   * 0.4 x the SVG rect's own 0.3 alpha lands the film at a barely-there
+   * ~0.12 in both themes. */
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .app-glass-surface {
     background-color: light-dark(#fff, #191919) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
+  .app-glass-surface::after { display: none; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -69,6 +107,7 @@
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
+  .app-glass-surface::after { display: none; }
 }
 
 .app-pressable {
