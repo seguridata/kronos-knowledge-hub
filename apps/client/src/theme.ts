@@ -2,6 +2,7 @@ import {
   Avatar,
   Badge,
   Button,
+  Card,
   createTheme,
   CSSVariablesResolver,
   Drawer,
@@ -30,7 +31,7 @@ const overlayTransitionProps = {
 // Spotlight). `light-dark()` is a <color> function only — using it for
 // backdrop-filter makes the declaration invalid and the browser drops the
 // Gaussian blur, leaving a see-through panel. Keep blur as a real filter.
-const glassFilter = "blur(16px) saturate(160%)";
+const glassFilter = "var(--app-glass-blur, blur(28px) saturate(155%))";
 const glassSurfaceStyle = {
   backgroundColor:
     "light-dark(rgba(255, 255, 255, 0.88), rgba(14, 16, 14, 0.84))",
@@ -158,6 +159,12 @@ export const theme = createTheme({
         color: "gray",
       },
       classNames: { root: "app-pressable" },
+    }),
+    // Every Card sits on the wallpaper (or on a parent glass surface). The
+    // shared `.app-glass-surface` class supplies the frosted tint + blur;
+    // nested Cards drop the extra blur via the carve-out in motion.css.
+    Card: Card.extend({
+      classNames: { root: "app-glass-surface" },
     }),
     Tooltip: Tooltip.extend({
       defaultProps: {

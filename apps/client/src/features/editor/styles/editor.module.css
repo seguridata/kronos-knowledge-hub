@@ -1,13 +1,49 @@
+/* Outer tray — the document sits in a machined bezel so the wallpaper
+ * frames the sheet instead of cutting through it. */
+.editorBezel {
+    margin: 48px auto 2rem;
+    padding: 6px;
+    border-radius: 1.75rem;
+    background: light-dark(rgba(25, 37, 22, 0.06), rgba(255, 255, 255, 0.05));
+    border: 1px solid light-dark(rgba(25, 37, 22, 0.08), rgba(255, 255, 255, 0.1));
+    box-shadow:
+        inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.08)),
+        0 28px 72px light-dark(rgba(20, 30, 15, 0.1), rgba(0, 0, 0, 0.42));
+
+    @media print {
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+    }
+}
+
+/* Inner glass plate — title, byline and body share one frosted surface. */
 .editor {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    min-height: calc(100dvh - var(--app-shell-header-height, 56px) - 96px);
-    padding: 8px 0;
-    margin: 48px auto;
+    min-height: calc(100dvh - var(--app-shell-header-height, 56px) - 120px);
+    padding: 1.75rem 0 3rem;
+    border-radius: calc(1.75rem - 6px);
+
+    /* Beat core.css `[data-mantine-color-scheme] .ProseMirror` so the
+     * opaque editor slabs cannot reappear inside the glass. */
+    :global([data-mantine-color-scheme]) & :global(.ProseMirror) {
+        background-color: transparent;
+    }
 
     @media print {
         padding: 0;
-        margin: 0;
         min-height: 0;
+        border-radius: 0;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 }
 

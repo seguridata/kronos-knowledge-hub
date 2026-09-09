@@ -13,10 +13,10 @@
   --app-duration-micro: 120ms;
   --app-duration-ui: 180ms;
   --app-duration-route: 220ms;
-  /* Gaussian frost: blur melts the backdrop; saturate + brightness keep it
-   * from going grey (Apple's iOS 26 "Liquid Glass" tuning is ~20-24px blur
-   * with a strong chroma boost). */
-  --app-glass-blur: blur(20px) saturate(180%) brightness(1.04);
+  /* Regular material — space cards, home panels.
+   * Thick material — the document sheet (bigger surface = heavier frost). */
+  --app-glass-blur: blur(28px) saturate(150%) brightness(1.02);
+  --app-glass-blur-thick: blur(36px) saturate(140%) brightness(1.02);
 }
 
 .app-glass {
@@ -66,15 +66,24 @@
 .app-glass-surface {
   position: relative;
   isolation: isolate;
-  background-color: light-dark(rgba(255, 255, 255, 0.6), rgba(18, 20, 18, 0.46));
+  background-color: light-dark(rgba(246, 248, 244, 0.78), rgba(12, 14, 12, 0.72));
   backdrop-filter: var(--app-glass-blur);
   -webkit-backdrop-filter: var(--app-glass-blur);
-  border: 1px solid light-dark(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.1));
+  border: 1px solid light-dark(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12));
   box-shadow:
-    inset 0 1px 0 0 light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.14)),
-    inset 0 0 0 1px light-dark(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.03)),
+    inset 0 1px 0 0 light-dark(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.16)),
+    inset 0 0 0 1px light-dark(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04)),
     0 2px 8px light-dark(rgba(20, 30, 15, 0.05), rgba(0, 0, 0, 0.24)),
     0 18px 44px light-dark(rgba(20, 30, 15, 0.1), rgba(0, 0, 0, 0.42));
+}
+
+/* Thick material: document-sized reading surfaces. Higher fill so body
+ * copy stays readable; heavier blur so the wallpaper reads as frost,
+ * not as a hole punched through the page. */
+.app-glass-surface--thick {
+  background-color: light-dark(rgba(250, 252, 248, 0.86), rgba(10, 12, 10, 0.84));
+  backdrop-filter: var(--app-glass-blur-thick);
+  -webkit-backdrop-filter: var(--app-glass-blur-thick);
 }
 
 .app-glass-surface::after {
@@ -93,7 +102,8 @@
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .app-glass-surface {
+  .app-glass-surface,
+  .app-glass-surface--thick {
     background-color: light-dark(#fff, #191919) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -102,10 +112,40 @@
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .app-glass-surface {
+  .app-glass-surface,
+  .app-glass-surface--thick {
     background-color: light-dark(#f6f8f4, #191919) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+  }
+  .app-glass-surface::after { display: none; }
+}
+
+/* Nested glass (a Card inside the editor surface, a Card inside a Card)
+ * must not stack another backdrop-filter — the inner text becomes unreadable
+ * and the frost doubles into a muddy smear. Keep the tint, drop the blur. */
+.app-glass-surface .app-glass-surface {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background-color: light-dark(rgba(255, 255, 255, 0.78), rgba(22, 24, 22, 0.78));
+  box-shadow:
+    inset 0 1px 0 0 light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.08)),
+    0 1px 2px light-dark(rgba(20, 30, 15, 0.04), rgba(0, 0, 0, 0.2));
+}
+
+.app-glass-surface .app-glass-surface::after {
+  display: none;
+}
+
+@media print {
+  .app-glass,
+  .app-glass-surface,
+  .app-glass-surface--thick {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
   }
   .app-glass-surface::after { display: none; }
 }

@@ -90,32 +90,40 @@ export function FullEditor({
     <Container
       fluid={fullPageWidth}
       size={!fullPageWidth && 900}
-      className={classes.editor}
-      style={{ display: "flex", flexDirection: "column" }}
+      p={0}
+      className={classes.editorBezel}
     >
-      {editorToolbarEnabled && editable && isEditMode && (
-        <MemoizedFixedToolbar />
-      )}
-      <MemoizedDeletedPageBanner slugId={slugId} />
-      <MemoizedTitleEditor
-        pageId={pageId}
-        slugId={slugId}
-        title={title}
-        spaceSlug={spaceSlug}
-        editable={editable}
-      />
-      <PageByline
-        creator={creator}
-        contributors={contributors}
-        readOnly={!editable}
-      />
-      <MemoizedPageEditor
-        pageId={pageId}
-        editable={editable}
-        content={content}
-        canComment={canComment}
-      />
-      <EmptyPageGetStarted pageId={pageId} editable={editable} />
+      <div
+        className={clsx(
+          classes.editor,
+          "app-glass-surface",
+          "app-glass-surface--thick",
+        )}
+      >
+        {editorToolbarEnabled && editable && isEditMode && (
+          <MemoizedFixedToolbar />
+        )}
+        <MemoizedDeletedPageBanner slugId={slugId} />
+        <MemoizedTitleEditor
+          pageId={pageId}
+          slugId={slugId}
+          title={title}
+          spaceSlug={spaceSlug}
+          editable={editable}
+        />
+        <PageByline
+          creator={creator}
+          contributors={contributors}
+          readOnly={!editable}
+        />
+        <MemoizedPageEditor
+          pageId={pageId}
+          editable={editable}
+          content={content}
+          canComment={canComment}
+        />
+        <EmptyPageGetStarted pageId={pageId} editable={editable} />
+      </div>
     </Container>
   );
 }

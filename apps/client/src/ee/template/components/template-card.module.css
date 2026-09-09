@@ -1,9 +1,7 @@
 .card {
     display: flex;
     flex-direction: column;
-    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
     transition: transform 150ms ease;
-    box-shadow: light-dark(rgba(0, 0, 0, 0.07) 0px 2px 45px 4px, none);
 
     @mixin hover {
         transform: scale(1.02);
