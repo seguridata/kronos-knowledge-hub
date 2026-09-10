@@ -36,6 +36,10 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react()],
     build: {
+      // Lightning CSS (Vite 8 default) drops `backdrop-filter` and
+      // `-webkit-backdrop-filter` during minify, so every glass surface
+      // ships as a translucent overlay with no frost. esbuild keeps them.
+      cssMinify: "esbuild",
       rolldownOptions: {
         output: {
           advancedChunks: {

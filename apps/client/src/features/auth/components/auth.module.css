@@ -1,7 +1,6 @@
 .authPage {
     min-height: 100svh;
     padding: 2.5rem clamp(1rem, 5vw, 5rem) 4rem;
-    isolation: isolate;
     overflow: hidden;
 }
 
