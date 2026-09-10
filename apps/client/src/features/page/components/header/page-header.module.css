@@ -1,8 +1,8 @@
 .header {
   height: 56px;
   background-color: light-dark(rgba(250, 252, 248, 0.84), rgba(14, 16, 14, 0.82));
-  backdrop-filter: var(--app-glass-blur, blur(16px) saturate(160%));
-  -webkit-backdrop-filter: var(--app-glass-blur, blur(16px) saturate(160%));
+  backdrop-filter: var(--app-glass-blur, blur(12px) saturate(160%));
+  -webkit-backdrop-filter: var(--app-glass-blur, blur(12px) saturate(160%));
   border-bottom: 1px solid light-dark(rgba(28, 38, 30, 0.08), rgba(255, 255, 255, 0.1));
   padding-left: var(--mantine-spacing-md);
   padding-right: var(--mantine-spacing-md);

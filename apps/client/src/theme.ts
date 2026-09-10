@@ -31,7 +31,7 @@ const overlayTransitionProps = {
 // Spotlight). `light-dark()` is a <color> function only — using it for
 // backdrop-filter makes the declaration invalid and the browser drops the
 // Gaussian blur, leaving a see-through panel. Keep blur as a real filter.
-const glassFilter = "var(--app-glass-blur, blur(28px) saturate(155%))";
+const glassFilter = "var(--app-glass-blur, blur(24px) saturate(155%))";
 const glassSurfaceStyle = {
   backgroundColor:
     "light-dark(rgba(255, 255, 255, 0.88), rgba(14, 16, 14, 0.84))",

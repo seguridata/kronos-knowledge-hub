@@ -15,8 +15,8 @@
   --app-duration-route: 220ms;
   /* Regular material — space cards, home panels.
    * Thick material — the document sheet (bigger surface = heavier frost). */
-  --app-glass-blur: blur(28px) saturate(150%) brightness(1.02);
-  --app-glass-blur-thick: blur(36px) saturate(140%) brightness(1.02);
+  --app-glass-blur: blur(24px) saturate(150%) brightness(1.02);
+  --app-glass-blur-thick: blur(32px) saturate(140%) brightness(1.02);
 }
 
 .app-glass {
