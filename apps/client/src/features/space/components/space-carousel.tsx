@@ -57,8 +57,8 @@ export default function SpaceCarousel() {
   const cards = data?.items.map((space, index) => (
     <motion.div
       key={space.id}
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={shouldReduceMotion ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{
         duration: 0.25,
         delay: index * STAGGER_STEP_S,

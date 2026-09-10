@@ -10,14 +10,17 @@
     border: 1px solid;
     transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
 
+    backdrop-filter: var(--app-glass-blur);
+    -webkit-backdrop-filter: var(--app-glass-blur);
+
     @mixin light {
         border-color: rgba(25, 37, 22, 0.1);
-        background-color: rgba(255, 255, 255, 0.72);
+        background-color: rgba(255, 255, 255, 0.62);
     }
 
     @mixin dark {
         border-color: rgba(255, 255, 255, 0.1);
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: rgba(14, 16, 14, 0.48);
     }
 
     @mixin hover {

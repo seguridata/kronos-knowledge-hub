@@ -40,10 +40,16 @@ html[data-mantine-color-scheme="light"] .mantine-AppShell-root {
   }
 }
 
-.mantine-AppShell-root,
-.mantine-AppShell-main {
+/* AppShell chrome is glass; keep it transparent so the html wallpaper
+ * is what backdrop-filter on cards actually samples. Do not put
+ * transform/filter/isolation on Main — that would trap the blur. */
+.mantine-AppShell-root {
   background-color: transparent !important;
   background-image: none;
+}
+
+.mantine-AppShell-main {
+  background-color: transparent !important;
 }
 
 @media (prefers-reduced-transparency: reduce) {

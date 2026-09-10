@@ -38,7 +38,7 @@ export default function HomeAiPrompt() {
   };
 
   return (
-    <div className={classes.wrapper}>
+    <div className={`${classes.wrapper} app-glass-surface`}>
       <div className={classes.kicker}>{t("Ask the knowledge base")}</div>
       <div className={classes.inputContainer}>
         <ChatInput
