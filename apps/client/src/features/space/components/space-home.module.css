@@ -1,10 +1,18 @@
 .page {
-    display: block;
-    width: 100%;
-    padding: var(--mantine-spacing-md);
-    color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--app-border, light-dark(#e2e3df, #363636));
+  border-radius: 18px;
+  background: var(--app-surface, light-dark(#fff, #191919));
+  color: light-dark(#191919, #f2f2ee);
+}
 
-    @mixin hover {
-        background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8));
-    }
+@media (max-width: 36rem) {
+  .page {
+    padding: 14px;
+    border-radius: 14px;
+  }
 }

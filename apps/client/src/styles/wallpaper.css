@@ -1,37 +1,25 @@
-/*
- * App wallpaper: a single still shared by every theme and viewport.
- * light-dark() is a color function — do not use it for url().
- */
-
+:root {
+  --wallpaper-base: #f6f7f4;
+  --wallpaper-image: none;
+}
+:root[data-mantine-color-scheme="dark"] {
+  --wallpaper-base: #111310;
+}
 html,
 body,
-#root,
-.mantine-AppShell-root {
-  background-color: #101010;
-  background-image: url("/wallpapers/background.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+#root {
+  background-color: var(--wallpaper-base);
 }
-
-/* AppShell chrome is glass; keep it transparent so the html wallpaper
- * is what backdrop-filter on cards actually samples. Do not put
- * transform/filter/isolation on Main — that would trap the blur. */
-.mantine-AppShell-root {
-  background-color: transparent !important;
-  background-image: none;
-}
-
+.mantine-AppShell-root,
 .mantine-AppShell-main {
-  background-color: transparent !important;
+  background: transparent;
 }
-
-@media (prefers-reduced-transparency: reduce) {
-  html,
-  body,
-  #root,
-  .mantine-AppShell-root {
-    background-image: none;
-  }
+:root {
+  accent-color: #84bd00;
+  scrollbar-color: light-dark(#c1c8b9, #414a38) transparent;
+  scrollbar-width: thin;
+}
+::selection {
+  background: rgb(132 189 0 / 25%);
+  color: inherit;
 }

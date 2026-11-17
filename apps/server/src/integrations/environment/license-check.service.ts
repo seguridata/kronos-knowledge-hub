@@ -1,112 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
 import { EnvironmentService } from './environment.service';
 import { KRONOS_FEATURES } from '../../kronos/kronos.features';
 
+/**
+ * Kronos no usa licencias enterprise de terceros: las funciones disponibles son
+ * exactamente KRONOS_FEATURES. Se conserva la API del servicio porque varios
+ * controladores consultan `hasFeature` para decidir qué opciones exponer.
+ */
 @Injectable()
 export class LicenseCheckService {
-  constructor(
-    private moduleRef: ModuleRef,
-    private environmentService: EnvironmentService,
-  ) {}
+  constructor(private environmentService: EnvironmentService) {}
 
-  isValidEELicense(licenseKey: string): boolean {
-    if (this.environmentService.isCloud()) {
-      return true;
-    }
-
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const LicenseModule = require('../../ee/licence/license.service');
-      const licenseService = this.moduleRef.get(LicenseModule.LicenseService, {
-        strict: false,
-      });
-      return licenseService.isValidEELicense(licenseKey);
-    } catch {
-      return false;
-    }
+  isValidEELicense(_licenseKey: string): boolean {
+    return this.environmentService.isCloud();
   }
 
-  hasFeature(licenseKey: string, feature: string, plan?: string): boolean {
-    if (this.environmentService.isCloud()) {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { getFeaturesForCloudPlan } = require('../../ee/licence/feature-registry');
-        return getFeaturesForCloudPlan(plan).has(feature);
-      } catch {
-        return false;
-      }
-    }
-
-    if (KRONOS_FEATURES.includes(feature)) {
-      return true;
-    }
-
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const LicenseModule = require('../../ee/licence/license.service');
-      const licenseService = this.moduleRef.get(LicenseModule.LicenseService, {
-        strict: false,
-      });
-      return licenseService.hasFeature(licenseKey, feature);
-    } catch {
-      return false;
-    }
+  hasFeature(_licenseKey: string, feature: string, _plan?: string): boolean {
+    if (this.environmentService.isCloud()) return false;
+    return KRONOS_FEATURES.includes(feature);
   }
 
-  getFeatures(licenseKey: string): string[] {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const LicenseModule = require('../../ee/licence/license.service');
-      const licenseService = this.moduleRef.get(LicenseModule.LicenseService, {
-        strict: false,
-      });
-      return this.mergeSelfHostFeatures(licenseService.getFeatures(licenseKey));
-    } catch {
-      return this.mergeSelfHostFeatures([]);
-    }
+  getFeatures(_licenseKey: string): string[] {
+    return this.environmentService.isCloud() ? [] : [...KRONOS_FEATURES];
   }
 
-  resolveFeatures(licenseKey: string, plan: string): string[] {
-    if (this.environmentService.isCloud()) {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { getFeaturesForCloudPlan } = require('../../ee/licence/feature-registry');
-        return [...getFeaturesForCloudPlan(plan)];
-      } catch {
-        return [];
-      }
-    }
-
+  resolveFeatures(licenseKey: string, _plan: string): string[] {
     return this.getFeatures(licenseKey);
   }
 
-  resolveTier(licenseKey: string, plan: string): string {
-    if (this.environmentService.isCloud()) {
-      return plan ?? 'standard';
-    }
-
-    return this.getLicenseType(licenseKey) ?? 'free';
-  }
-
-  private mergeSelfHostFeatures(features: string[]): string[] {
-    if (this.environmentService.isCloud()) {
-      return features;
-    }
-
-    return [...new Set([...KRONOS_FEATURES, ...features])];
-  }
-
-  private getLicenseType(licenseKey: string): string | null {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const LicenseModule = require('../../ee/licence/license.service');
-      const licenseService = this.moduleRef.get(LicenseModule.LicenseService, {
-        strict: false,
-      });
-      return licenseService.getLicenseType(licenseKey);
-    } catch {
-      return null;
-    }
+  resolveTier(_licenseKey: string, plan: string): string {
+    return this.environmentService.isCloud() ? (plan ?? 'standard') : 'free';
   }
 }

@@ -4,7 +4,8 @@ import GlobalAppShell from "@/components/layouts/global/global-app-shell.tsx";
 import { PosthogUser } from "@/ee/components/posthog-user.tsx";
 import { isCloud } from "@/lib/config.ts";
 import { SearchSpotlight } from "@/features/search/components/search-spotlight.tsx";
-import React from "react";
+import React, { Suspense } from "react";
+import PageLoading from "@/components/ui/page-loading";
 import { useGetSpaceBySlugQuery } from "@/features/space/queries/space-query.ts";
 
 export default function Layout() {
@@ -14,7 +15,9 @@ export default function Layout() {
   return (
     <UserProvider>
       <GlobalAppShell>
-        <Outlet />
+        <Suspense fallback={<PageLoading />}>
+          <Outlet />
+        </Suspense>
       </GlobalAppShell>
       {isCloud() && <PosthogUser />}
       <SearchSpotlight spaceId={space?.id} />

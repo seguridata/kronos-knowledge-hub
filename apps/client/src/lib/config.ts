@@ -84,10 +84,6 @@ export function getDrawioUrl() {
   return getConfigValue("DRAWIO_URL", "https://embed.diagrams.net");
 }
 
-export function getBillingTrialDays() {
-  return getConfigValue("BILLING_TRIAL_DAYS");
-}
-
 export function getPostHogHost() {
   return getConfigValue("POSTHOG_HOST");
 }

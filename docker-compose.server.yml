@@ -35,7 +35,7 @@ services:
       - kronos_storage:/app/data/storage
 
   db:
-    image: postgres:18
+    image: pgvector/pgvector:pg18
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-kronos}
       POSTGRES_USER: ${POSTGRES_USER:-kronos}

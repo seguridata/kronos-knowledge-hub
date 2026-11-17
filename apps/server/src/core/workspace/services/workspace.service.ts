@@ -69,8 +69,6 @@ export class WorkspaceService {
     private favoriteRepo: FavoriteRepo,
     @InjectKysely() private readonly db: KyselyDB,
     @InjectQueue(QueueName.ATTACHMENT_QUEUE) private attachmentQueue: Queue,
-    @InjectQueue(QueueName.BILLING_QUEUE) private billingQueue: Queue,
-    @InjectQueue(QueueName.AI_QUEUE) private aiQueue: Queue,
     @Inject(AUDIT_SERVICE) private readonly auditService: IAuditService,
     private userSessionRepo: UserSessionRepo,
   ) {}
@@ -122,15 +120,12 @@ export class WorkspaceService {
     createWorkspaceDto: CreateWorkspaceDto,
     trx?: KyselyTransaction,
   ) {
-    let trialEndAt = undefined;
-
     const createdWorkspace = await executeTx(
       this.db,
       async (trx) => {
         let hostname = undefined;
         let status = undefined;
         let plan = undefined;
-        let billingEmail = undefined;
         let settings = undefined;
 
         if (this.environmentService.isCloud()) {
@@ -138,13 +133,8 @@ export class WorkspaceService {
           hostname = await this.generateHostname(
             createWorkspaceDto.hostname ?? createWorkspaceDto.name,
           );
-          trialEndAt = addDays(
-            new Date(),
-            this.environmentService.getBillingTrialDays(),
-          );
           status = WorkspaceStatus.Active;
           plan = 'standard';
-          billingEmail = user.email;
           settings = { ai: { generative: true, chat: true } };
         }
 
@@ -155,9 +145,7 @@ export class WorkspaceService {
             description: createWorkspaceDto.description,
             hostname,
             status,
-            trialEndAt,
             plan,
-            billingEmail,
             settings,
           },
           trx,
@@ -233,26 +221,6 @@ export class WorkspaceService {
       },
       trx,
     );
-
-    if (this.environmentService.isCloud() && trialEndAt) {
-      try {
-        const delay = trialEndAt.getTime() - Date.now();
-
-        await this.billingQueue.add(
-          QueueJob.TRIAL_ENDED,
-          { workspaceId: createdWorkspace.id },
-          { delay },
-        );
-
-        await this.billingQueue.add(
-          QueueJob.WELCOME_EMAIL,
-          { userId: user.id },
-          { delay: 30 * 60 * 1000 }, // 30m
-        );
-      } catch (err) {
-        this.logger.error(err);
-      }
-    }
 
     return createdWorkspace;
   }
@@ -333,7 +301,6 @@ export class WorkspaceService {
       typeof updateWorkspaceDto.mcpEnabled !== 'undefined' ||
       typeof updateWorkspaceDto.restrictApiToAdmins !== 'undefined' ||
       typeof updateWorkspaceDto.allowMemberTemplates !== 'undefined' ||
-      typeof updateWorkspaceDto.isScimEnabled !== 'undefined' ||
       typeof updateWorkspaceDto.allowPersonalSpaces !== 'undefined'
     ) {
       const ws = await this.db
@@ -348,14 +315,6 @@ export class WorkspaceService {
 
       if (typeof updateWorkspaceDto.mcpEnabled !== 'undefined') {
         if (!this.licenseCheckService.hasFeature(ws.licenseKey, 'mcp', ws.plan)) {
-          throw new ForbiddenException(
-            'This feature requires a valid license',
-          );
-        }
-      }
-
-      if (typeof updateWorkspaceDto.isScimEnabled !== 'undefined') {
-        if (!this.licenseCheckService.hasFeature(ws.licenseKey, Feature.SCIM, ws.plan)) {
           throw new ForbiddenException(
             'This feature requires a valid license',
           );
@@ -558,24 +517,6 @@ export class WorkspaceService {
       );
     });
 
-    if (after.aiSearch === true) {
-      await this.aiQueue.add(QueueJob.WORKSPACE_CREATE_EMBEDDINGS, {
-        workspaceId,
-      });
-    } else if (after.aiSearch === false) {
-      const deleteJobId = `ai-search-disabled-${workspaceId}`;
-      await this.aiQueue.add(
-        QueueJob.WORKSPACE_DELETE_EMBEDDINGS,
-        { workspaceId },
-        {
-          jobId: deleteJobId,
-          delay: 24 * 60 * 60 * 1000,
-          removeOnComplete: true,
-          removeOnFail: true,
-        },
-      );
-    }
-
     const workspace = await this.workspaceRepo.findById(workspaceId, {
       withMemberCount: true,
       withLicenseKey: true,
@@ -588,7 +529,6 @@ export class WorkspaceService {
         'enforceSso',
         'enforceMfa',
         'emailDomains',
-        'isScimEnabled',
       ],
       updateWorkspaceDto,
       workspaceBefore,

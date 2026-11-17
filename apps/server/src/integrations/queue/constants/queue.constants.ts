@@ -2,10 +2,7 @@ export enum QueueName {
   EMAIL_QUEUE = '{email-queue}',
   ATTACHMENT_QUEUE = '{attachment-queue}',
   GENERAL_QUEUE = '{general-queue}',
-  BILLING_QUEUE = '{billing-queue}',
   FILE_TASK_QUEUE = '{file-task-queue}',
-  SEARCH_QUEUE = '{search-queue}',
-  AI_QUEUE = '{ai-queue}',
   HISTORY_QUEUE = '{history-queue}',
   NOTIFICATION_QUEUE = '{notification-queue}',
   AUDIT_QUEUE = '{audit-queue}',
@@ -25,11 +22,6 @@ export enum QueueJob {
   PAGE_BACKLINKS = 'page-backlinks',
   ADD_PAGE_WATCHERS = 'add-page-watchers',
 
-  STRIPE_SEATS_SYNC = 'sync-stripe-seats',
-  TRIAL_ENDED = 'trial-ended',
-  WELCOME_EMAIL = 'welcome-email',
-  FIRST_PAYMENT_EMAIL = 'first-payment-email',
-
   IMPORT_TASK = 'import-task',
   EXPORT_TASK = 'export-task',
 
@@ -42,7 +34,6 @@ export enum QueueJob {
   SEARCH_REMOVE_PAGE = 'search-remove-page',
   SEARCH_REMOVE_ASSET = 'search-remove-attachment',
   SEARCH_REMOVE_FACE = 'search-remove-comment',
-  TYPESENSE_FLUSH = 'typesense-flush',
 
   PAGE_CREATED = 'page-created',
   PAGE_CONTENT_UPDATED = 'page-content-updated',

@@ -8,21 +8,22 @@ import { zod4Resolver } from "mantine-form-zod-resolver";
 import { changePassword } from "@/features/auth/services/auth-service.ts";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
+import classes from "@/components/settings/settings-content.module.css";
 
 export default function ChangePassword() {
   const { t } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <Group justify="space-between" wrap="nowrap" gap="xl">
-      <div style={{ minWidth: 0, flex: 1 }}>
+    <Group justify="space-between" className={classes.row}>
+      <div className={classes.description}>
         <Text size="md">{t("Password")}</Text>
         <Text size="sm" c="dimmed">
           {t("You can change your password here.")}
         </Text>
       </div>
 
-      <Button onClick={open} variant="default" style={{ whiteSpace: "nowrap" }}>
+      <Button onClick={open} variant="default">
         {t("Change password")}
       </Button>
 
@@ -42,9 +43,7 @@ export default function ChangePassword() {
 }
 
 const formSchema = z.object({
-  oldPassword: z
-    .string({ error: "your current password is required" })
-    .min(8),
+  oldPassword: z.string({ error: "your current password is required" }).min(8),
   newPassword: z.string({ error: "New password is required" }).min(8),
 });
 

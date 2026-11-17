@@ -13,13 +13,14 @@ import { useCollabToken } from "@/features/auth/queries/auth-query.tsx";
 import { Error404 } from "@/components/ui/error-404.tsx";
 import { useEntitlements } from "@/ee/entitlement/use-entitlements";
 import { entitlementAtom } from "@/ee/entitlement/entitlement-atom";
+import { Button, Center, Loader, Stack, Text, Title } from "@mantine/core";
 
 export function UserProvider({ children }: React.PropsWithChildren) {
   const [, setCurrentUser] = useAtom(currentUserAtom);
   const setEntitlements = useSetAtom(entitlementAtom);
-  const { data, isLoading, error, isError } = useCurrentUser();
+  const { data, isLoading, error, isError, refetch } = useCurrentUser();
   const { data: entitlements } = useEntitlements();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [, setSocket] = useAtom(socketAtom);
   // fetch collab token on load
   const { data: collab } = useCollabToken();
@@ -61,7 +62,8 @@ export function UserProvider({ children }: React.PropsWithChildren) {
   }, [data, isLoading]);
 
   useEffect(() => {
-    document.documentElement.lang = i18n.resolvedLanguage || i18n.language || "en-US";
+    document.documentElement.lang =
+      i18n.resolvedLanguage || i18n.language || "en-US";
   }, [i18n.language, i18n.resolvedLanguage]);
 
   useEffect(() => {
@@ -70,14 +72,38 @@ export function UserProvider({ children }: React.PropsWithChildren) {
     }
   }, [entitlements]);
 
-  if (isLoading) return <></>;
+  if (isLoading)
+    return (
+      <Center mih="100svh" role="status" aria-live="polite">
+        <Stack align="center" gap="md">
+          <Loader size="sm" />
+          <Text size="sm" c="dimmed">
+            {t("Loading your workspace...")}
+          </Text>
+        </Stack>
+      </Center>
+    );
 
   if (isError && error?.["response"]?.status === 404) {
     return <Error404 />;
   }
 
   if (error) {
-    return <></>;
+    return (
+      <Center mih="100svh" p="xl">
+        <Stack align="center" gap="md" maw={440} ta="center" role="alert">
+          <Title order={1} size="h3">
+            {t("Unable to load your workspace")}
+          </Title>
+          <Text size="sm" c="dimmed">
+            {t("Check your connection and try again.")}
+          </Text>
+          <Button variant="default" onClick={() => void refetch()}>
+            {t("Try again")}
+          </Button>
+        </Stack>
+      </Center>
+    );
   }
 
   return <>{children}</>;

@@ -25,7 +25,14 @@ interface Props {
 
 export default function RecentChanges({ spaceId }: Props) {
   const { t } = useTranslation();
-  const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } = useRecentChangesQuery(spaceId);
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useRecentChangesQuery(spaceId);
   const pages = data?.pages.flatMap((p) => p.items) ?? [];
 
   if (isLoading) {
@@ -38,7 +45,7 @@ export default function RecentChanges({ spaceId }: Props) {
 
   return pages.length > 0 ? (
     <>
-      <Table.ScrollContainer minWidth={500}>
+      <Table.ScrollContainer minWidth={0} className={rowClasses.documentList}>
         <Table highlightOnHover verticalSpacing="sm">
           <Table.Tbody>
             {pages.map((page) => (

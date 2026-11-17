@@ -1,47 +1,80 @@
-.card {
-    /* Surface look comes from the shared .app-glass-surface class, added on
-     * the <Card> in space-grid.tsx / favorite-spaces-grid.tsx. */
-    @mixin hover {
-        transform: scale(1.02);
-    }
+.card.card {
+  min-width: 0;
+  border: 1px solid var(--app-border, light-dark(#e2e3df, #363636));
+  border-radius: 16px;
+  background: var(--app-surface, light-dark(#fff, #191919));
+  color: light-dark(#191919, #f2f2ee);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 3%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-decoration: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
 
-    &:focus-visible {
-        outline: 2px solid var(--mantine-primary-color-filled);
-        outline-offset: 2px;
-    }
+.card::after {
+  display: none;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--app-accent-green, #84bd00);
+  outline-offset: 3px;
 }
 
 .cardSection {
-    position: relative;
-    background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+  position: relative;
+  border-bottom: 1px solid var(--app-border, light-dark(#e2e3df, #363636));
+  background: light-dark(#f2f3ef, #232323);
 }
 
 .starButton {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    opacity: 0;
-    transition: opacity 150ms ease;
+  position: absolute;
+  top: 3px;
+  inset-inline-end: 5px;
+  z-index: 1;
+  /* Keep the action discoverable for touch and keyboard users. */
+  opacity: 1;
 }
 
-.starButton[data-favorited="true"] {
-    opacity: 1;
+.starButton > button {
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 10px;
 }
 
-.card:hover .starButton {
-    opacity: 1;
+.card > :global(.mantine-Avatar-root) {
+  outline: 3px solid var(--app-surface, light-dark(#fff, #191919));
+  border-radius: 12px;
 }
 
 .title {
-    font-family:
-            Greycliff CF,
-            var(--mantine-font-family);
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+  min-width: 0;
+  font-family: var(--mantine-font-family);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.card > :global(.mantine-Text-root):not(.title),
+.icon {
+  color: var(--app-text-muted, light-dark(#64665f, #b5b7ae));
 }
 
 .icon {
-    margin-right: rem(5px);
-    color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-2));
+  margin-inline-end: 5px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card.card:hover {
+    border-color: color-mix(in srgb, var(--app-accent-green, #84bd00) 55%, var(--app-border, light-dark(#e2e3df, #363636)));
+    box-shadow: 0 3px 10px rgb(0 0 0 / 6%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.card {
+    transition: none;
+  }
 }

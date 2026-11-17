@@ -65,6 +65,8 @@ export function SetupWorkspaceForm() {
               <TextInput
                 id="workspaceName"
                 type="text"
+                autoComplete="organization"
+                data-autofocus
                 label={t("Workspace Name")}
                 placeholder={t("e.g ACME Inc")}
                 variant="filled"
@@ -76,6 +78,7 @@ export function SetupWorkspaceForm() {
             <TextInput
               id="name"
               type="text"
+              autoComplete="name"
               label={t("Your Name")}
               placeholder={t("enter your full name")}
               variant="filled"
@@ -86,6 +89,7 @@ export function SetupWorkspaceForm() {
             <TextInput
               id="email"
               type="email"
+              autoComplete="email"
               label={t("Your Email")}
               placeholder="email@example.com"
               variant="filled"
@@ -94,6 +98,7 @@ export function SetupWorkspaceForm() {
             />
 
             <PasswordInput
+              autoComplete="new-password"
               label={t("Password")}
               placeholder={t("Enter a strong password")}
               variant="filled"

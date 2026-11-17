@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { AccountMfaSection } from "@/features/user/components/account-mfa-section";
 import SessionList from "@/features/session/components/session-list";
+import classes from "@/components/settings/settings-content.module.css";
 
 export default function AccountSettings() {
   const { t } = useTranslation();
@@ -20,27 +21,32 @@ export default function AccountSettings() {
           {t("My Profile")} - {getAppName()}
         </title>
       </Helmet>
-      <SettingsTitle title={t("My Profile")} />
+      <div className={classes.content}>
+        <SettingsTitle title={t("My Profile")} />
 
-      <AccountAvatar />
+        <div className={classes.identity}>
+          <AccountAvatar />
+          <AccountNameForm />
+        </div>
 
-      <AccountNameForm />
+        <Divider my="lg" />
 
-      <Divider my="lg" />
+        <ChangeEmail />
 
-      <ChangeEmail />
+        <Divider my="lg" />
 
-      <Divider my="lg" />
+        <ChangePassword />
 
-      <ChangePassword />
+        <Divider my="lg" />
 
-      <Divider my="lg" />
+        <AccountMfaSection />
 
-      <AccountMfaSection />
+        <Divider my="lg" />
 
-      <Divider my="lg" />
-
-      <SessionList />
+        <div className={classes.sessions}>
+          <SessionList />
+        </div>
+      </div>
     </>
   );
 }

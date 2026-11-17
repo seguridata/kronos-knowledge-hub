@@ -11,6 +11,7 @@ import "@/styles/motion.css";
 import "@/styles/wallpaper.css";
 import "@/styles/theme-transition.css";
 import "@/styles/skeleton.css";
+import "@/styles/workspace-design.css";
 
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";

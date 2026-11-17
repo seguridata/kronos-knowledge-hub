@@ -42,3 +42,15 @@
     display: none;
   }
 }
+.navbar,
+.aside {
+  background: var(--app-surface);
+  border-color: var(--app-border);
+}
+@media (max-width: 48em) {
+  .navbar,
+  .aside {
+    width: min(350px, 100vw);
+    max-width: 100vw;
+  }
+}

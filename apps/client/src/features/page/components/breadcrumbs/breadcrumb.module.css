@@ -1,30 +1,49 @@
 .breadcrumbs {
   display: flex;
   align-items: center;
-  overflow: hidden;
+  min-width: 0;
   flex-wrap: nowrap;
+  font-family: Poppins, var(--mantine-font-family);
 
   a {
-    color: var(--mantine-color-default-color);
-    line-height: inherit;
+    color: var(--app-text-muted, light-dark(#61615c, #b7b7b0));
+    line-height: 1.6;
+    border-radius: 3px;
+
+    @mixin hover { color: light-dark(#191919, #fff); }
+
+    &[aria-current="page"] {
+      color: light-dark(#191919, #f3f3ef);
+      font-weight: 500;
+    }
+
+    &:focus-visible {
+      outline: 2px solid light-dark(#537900, #84bd00);
+      outline-offset: -2px;
+    }
   }
 
-  .mantine-Breadcrumbs-breadcrumb {
-    min-width: 1px;
-    overflow: hidden;
+  :global(.mantine-Breadcrumbs-breadcrumb) {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  :global(.mantine-Breadcrumbs-separator) {
+    flex-shrink: 0;
+    color: var(--app-text-muted, light-dark(#61615c, #b7b7b0));
   }
 }
 
 .truncatedText {
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
+  min-width: 0;
 }
 
 .breadcrumbDiv {
-  overflow: hidden;
-  @media (max-width: $mantine-breakpoint-sm) {
-    overflow: visible;
-  }
+  flex: 1;
+  min-width: 0;
 }

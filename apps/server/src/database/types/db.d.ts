@@ -40,6 +40,9 @@ export interface ApiKeys {
   updatedAt: Generated<Timestamp>;
   creatorId: string;
   workspaceId: string;
+  prefix: string | null;
+  keyHash: string | null;
+  scope: Generated<string>;
 }
 
 export interface Attachments {

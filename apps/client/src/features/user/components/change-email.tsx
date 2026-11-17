@@ -15,6 +15,7 @@ import * as React from "react";
 import { useForm } from "@mantine/form";
 import { zod4Resolver } from "mantine-form-zod-resolver";
 import { useTranslation } from "react-i18next";
+import classes from "@/components/settings/settings-content.module.css";
 
 export default function ChangeEmail() {
   const { t } = useTranslation();
@@ -22,8 +23,8 @@ export default function ChangeEmail() {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <Group justify="space-between" wrap="nowrap" gap="xl">
-      <div style={{ minWidth: 0, flex: 1 }}>
+    <Group justify="space-between" className={classes.row}>
+      <div className={classes.description}>
         <Text size="md">{t("Email")}</Text>
         <Text size="sm" c="dimmed">
           {currentUser?.user.email}
@@ -56,9 +57,7 @@ export default function ChangeEmail() {
 
 const formSchema = z.object({
   email: z.email({ error: "New email is required" }),
-  password: z
-    .string({ error: "your current password is required" })
-    .min(8),
+  password: z.string({ error: "your current password is required" }).min(8),
 });
 
 type FormValues = z.infer<typeof formSchema>;

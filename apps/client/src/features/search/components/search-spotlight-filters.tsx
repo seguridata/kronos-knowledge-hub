@@ -3,7 +3,6 @@ import {
   Button,
   Menu,
   Text,
-  Badge,
   Group,
   Switch,
   getDefaultZIndex,
@@ -61,11 +60,9 @@ export function SearchSpotlightFilters({
 
   const contentTypeOptions = [
     { value: "page", label: t("Pages") },
-    {
-      value: "attachment",
-      label: t("Attachments"),
-      disabled: !hasAttachmentIndexing,
-    },
+    ...(hasAttachmentIndexing
+      ? [{ value: "attachment", label: t("Attachments") }]
+      : []),
   ];
 
   const handleSpaceSelect = (spaceId: string | null) => {
@@ -179,31 +176,23 @@ export function SearchSpotlightFilters({
               component={RadioMenuItem}
               aria-checked={contentType === option.value}
               onClick={() =>
-                !option.disabled &&
                 contentType !== option.value &&
                 handleFilterChange("contentType", option.value)
               }
-              disabled={
-                option.disabled || (isAiMode && option.value === "attachment")
-              }
+              disabled={isAiMode && option.value === "attachment"}
             >
               <Group flex="1" gap="xs">
                 <div>
                   <Text size="sm">{option.label}</Text>
-                  {option.disabled && (
-                    <Badge size="xs" mt={4}>
-                      {t("Enterprise")}
-                    </Badge>
+                  {isAiMode && option.value === "attachment" && (
+                    <Text size="xs" mt={4}>
+                      {t("AI Answers not available for attachments")}
+                    </Text>
                   )}
-                  {!option.disabled &&
-                    isAiMode &&
-                    option.value === "attachment" && (
-                      <Text size="xs" mt={4}>
-                        {t("AI Answers not available for attachments")}
-                      </Text>
-                    )}
                 </div>
-                {contentType === option.value && <IconCheck size={20} aria-hidden />}
+                {contentType === option.value && (
+                  <IconCheck size={20} aria-hidden />
+                )}
               </Group>
             </Menu.Item>
           ))}

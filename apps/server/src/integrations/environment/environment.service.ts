@@ -214,22 +214,6 @@ export class EnvironmentService {
     return !this.isCloud();
   }
 
-  getStripePublishableKey(): string {
-    return this.configService.get<string>('STRIPE_PUBLISHABLE_KEY');
-  }
-
-  getStripeSecretKey(): string {
-    return this.configService.get<string>('STRIPE_SECRET_KEY');
-  }
-
-  getStripeWebhookSecret(): string {
-    return this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
-  }
-
-  getBillingTrialDays(): number {
-    return parseInt(this.configService.get<string>('BILLING_TRIAL_DAYS', '14'));
-  }
-
   getCollabUrl(): string {
     return this.configService.get<string>('COLLAB_URL');
   }
@@ -254,28 +238,6 @@ export class EnvironmentService {
 
   getPostHogKey(): string {
     return this.configService.get<string>('POSTHOG_KEY');
-  }
-
-  getSearchDriver(): string {
-    return this.configService
-      .get<string>('SEARCH_DRIVER', 'database')
-      .toLowerCase();
-  }
-
-  getTypesenseUrl(): string {
-    return this.configService
-      .get<string>('TYPESENSE_URL', 'http://localhost:8108')
-      .toLowerCase();
-  }
-
-  getTypesenseApiKey(): string {
-    return this.configService.get<string>('TYPESENSE_API_KEY');
-  }
-
-  getTypesenseLocale(): string {
-    return this.configService
-      .get<string>('TYPESENSE_LOCALE', 'en')
-      .toLowerCase();
   }
 
   getAiDriver(): string {

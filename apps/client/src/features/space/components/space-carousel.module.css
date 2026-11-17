@@ -1,51 +1,49 @@
 .bezel {
-  width: 236px;
-  padding: 5px;
-  border-radius: 1.35rem;
-  background: light-dark(rgba(25, 37, 22, 0.04), rgba(255, 255, 255, 0.04));
-  border: 1px solid light-dark(rgba(25, 37, 22, 0.07), rgba(255, 255, 255, 0.08));
-  transition: transform 180ms var(--app-ease-out, cubic-bezier(0.215, 0.61, 0.355, 1));
+  width: 252px;
+  max-width: 76vw;
+  height: 100%;
+  padding: 0;
+  border-radius: 16px;
 }
 
-.card {
-  /* Surface look (tint, frost, specular edge, shadow, noise) comes from the
-   * shared .app-glass-surface class — added on the <Card> in space-carousel.tsx.
-   * The card sits on the near-transparent .bezel, so the wallpaper reads
-   * through the blur. */
+.card.card {
+  min-width: 0;
+  min-height: 192px;
   height: 100%;
-  transition: box-shadow 180ms ease, border-color 180ms ease;
+  border: 1px solid var(--app-border, light-dark(#e2e3df, #363636));
+  border-radius: 16px;
+  background: var(--app-surface, light-dark(#fff, #191919));
+  color: light-dark(#191919, #f2f2ee);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 3%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-decoration: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
 
-  @mixin hover {
-    border-color: color-mix(in oklch, var(--app-accent-green) 40%, transparent);
-    box-shadow:
-      inset 0 1px 0 0 light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.16)),
-      0 12px 30px light-dark(rgba(24, 35, 17, 0.12), rgba(0, 0, 0, 0.4));
-  }
+.card::after {
+  display: none;
+}
 
-  &:focus-visible {
-    outline: 2px solid var(--app-accent-green);
-    outline-offset: 2px;
-  }
+.card:focus-visible {
+  outline: 2px solid var(--app-accent-green, #84bd00);
+  outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .bezel:hover {
-    transform: translateY(-3px);
+  .card.card:hover {
+    border-color: color-mix(in srgb, var(--app-accent-green, #84bd00) 55%, var(--app-border, light-dark(#e2e3df, #363636)));
+    box-shadow: 0 3px 10px rgb(0 0 0 / 6%);
   }
 }
 
 .cardSection {
-  background: linear-gradient(
-    135deg,
-    light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6)) 0%,
-    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5)) 100%
-  );
+  background: light-dark(#f2f3ef, #232323);
+  border-bottom: 1px solid var(--app-border, light-dark(#e2e3df, #363636));
   position: relative;
   overflow: hidden;
 
-  /* A hairline brand-green thread along the top edge — the "verde valida"
-   * 10% accent, applied as a 2px line rather than a fill so it stays subtle
-   * across every space card banner. */
+  /* Brand color stays a quiet detail, leaving the name as the focal point. */
   &::after {
     content: "";
     position: absolute;
@@ -53,20 +51,49 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: var(--app-accent-green);
-    opacity: 0.55;
+    background: var(--app-accent-green, #84bd00);
+    opacity: 0.65;
   }
 }
 
 .title {
+  min-width: 0;
   font-family: var(--mantine-font-family);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
+  line-height: 1.5;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
 .description {
-  min-height: 2.1em;
-  line-height: 1.4;
+  min-height: 3em;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.card > :global(.mantine-Text-root):not(.title) {
+  color: var(--app-text-muted, light-dark(#64665f, #b5b7ae));
+}
+
+.card > :global(.mantine-Text-root):last-child:not(.title):not(.description) {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.card > :global(.mantine-Avatar-root) {
+  outline: 3px solid var(--app-surface, light-dark(#fff, #191919));
+  border-radius: 12px;
+}
+
+@media (max-width: 36rem) {
+  .bezel {
+    width: 232px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.card {
+    transition: none;
+  }
 }

@@ -1,4 +1,5 @@
-import { AppShell, Container } from "@mantine/core";
+import { AppShell, Container, Drawer } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,8 +16,6 @@ import AiChatSidebar from "@/ee/ai-chat/components/ai-chat-sidebar.tsx";
 import { AppHeader } from "@/components/layouts/global/app-header.tsx";
 import Aside from "@/components/layouts/global/aside.tsx";
 import classes from "./app-shell.module.css";
-import { useTrialEndAction } from "@/ee/hooks/use-trial-end-action.tsx";
-import { useToggleSidebar } from "@/components/layouts/global/hooks/hooks/use-toggle-sidebar.ts";
 import GlobalSidebar from "@/components/layouts/global/global-sidebar.tsx";
 import { ASIDE_PANEL_ID } from "@/hooks/use-toggle-aside.tsx";
 import { MAIN_CONTENT_ID, SkipToMain } from "@/components/ui/skip-to-main.tsx";
@@ -27,14 +26,13 @@ export default function GlobalAppShell({
   children: React.ReactNode;
 }) {
   const { t } = useTranslation();
-  useTrialEndAction();
-  const [mobileOpened] = useAtom(mobileSidebarAtom);
-  const toggleMobile = useToggleSidebar(mobileSidebarAtom);
+  const [mobileOpened, setMobileOpened] = useAtom(mobileSidebarAtom);
+  const isMobile = useMediaQuery("(max-width: 47.99em)");
   const [desktopOpened] = useAtom(desktopSidebarAtom);
   const [{ isAsideOpen, tab: asideTab }] = useAtom(asideStateAtom);
   const [sidebarWidth, setSidebarWidth] = useAtom(sidebarWidthAtom);
   const [isResizing, setIsResizing] = useState(false);
-  const sidebarRef = useRef(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const startResizing = React.useCallback((mouseDownEvent) => {
     mouseDownEvent.preventDefault();
@@ -46,8 +44,8 @@ export default function GlobalAppShell({
   }, []);
 
   const resize = React.useCallback(
-    (mouseMoveEvent) => {
-      if (isResizing) {
+    (mouseMoveEvent: MouseEvent) => {
+      if (isResizing && sidebarRef.current) {
         const newWidth =
           mouseMoveEvent.clientX -
           sidebarRef.current.getBoundingClientRect().left;
@@ -62,7 +60,7 @@ export default function GlobalAppShell({
         setSidebarWidth(newWidth);
       }
     },
-    [isResizing],
+    [isResizing, setSidebarWidth],
   );
 
   useEffect(() => {
@@ -80,102 +78,146 @@ export default function GlobalAppShell({
   const isSpaceRoute = location.pathname.startsWith("/s/");
   const isAiRoute = location.pathname.startsWith("/ai");
   const isPageRoute = location.pathname.includes("/p/");
-  const showGlobalSidebar = !isSpaceRoute && !isSettingsRoute && !isAiRoute;
-  const [routeEnter, setRouteEnter] = useState(0);
-  const previousPath = useRef(location.pathname);
-
+  const navigationLabel = isSpaceRoute
+    ? t("Space navigation")
+    : isSettingsRoute
+      ? t("Settings navigation")
+      : isAiRoute
+        ? t("AI navigation")
+        : t("Main navigation");
+  const sidebarContent = isSpaceRoute ? (
+    <SpaceSidebar />
+  ) : isSettingsRoute ? (
+    <SettingsSidebar />
+  ) : isAiRoute ? (
+    <AiChatSidebar />
+  ) : (
+    <GlobalSidebar />
+  );
   useEffect(() => {
-    if (previousPath.current === location.pathname) return;
-    previousPath.current = location.pathname;
-    if (isPageRoute) return;
-    setRouteEnter((value) => value + 1);
-  }, [location.pathname, isPageRoute]);
+    setMobileOpened(false);
+  }, [location.pathname, isMobile, setMobileOpened]);
 
   return (
     <>
       <SkipToMain />
       <AppShell
-      header={{ height: 56 }}
-      navbar={{
-        width: isSpaceRoute ? sidebarWidth : 300,
-        breakpoint: "sm",
-        collapsed: {
-          mobile: !mobileOpened,
-          desktop: !desktopOpened,
-        },
-      }}
-      aside={
-        isPageRoute && {
-          width: 350,
+        header={{ height: 64 }}
+        navbar={{
+          width: isSpaceRoute ? sidebarWidth : 256,
           breakpoint: "sm",
-          collapsed: { mobile: !isAsideOpen, desktop: !isAsideOpen },
-        }
-      }
-      padding="md"
-    >
-      <AppShell.Header px="md" className={classes.header}>
-        <AppHeader />
-      </AppShell.Header>
-      <AppShell.Navbar
-        className={classes.navbar}
-        withBorder={false}
-        ref={sidebarRef}
-        aria-label={
-          isSpaceRoute
-            ? t("Space navigation")
-            : isSettingsRoute
-              ? t("Settings navigation")
-              : isAiRoute
-                ? t("AI navigation")
-                : t("Main navigation")
-        }
-      >
-        {isSpaceRoute && (
-          <div className={classes.resizeHandle} onMouseDown={startResizing} />
-        )}
-        {isSpaceRoute && <SpaceSidebar />}
-        {isSettingsRoute && <SettingsSidebar />}
-        {isAiRoute && <AiChatSidebar />}
-        {showGlobalSidebar && <GlobalSidebar />}
-      </AppShell.Navbar>
-      <AppShell.Main
-        id={MAIN_CONTENT_ID}
-        tabIndex={-1}
-        className={classes.main}
-        data-enter={isPageRoute ? undefined : String(routeEnter)}
-      >
-        {isSettingsRoute ? (
-          <Container size={900} pb={80}>
-            {children}
-          </Container>
-        ) : (
-          children
-        )}
-      </AppShell.Main>
-
-      {isPageRoute && (
-        <AppShell.Aside
-          id={ASIDE_PANEL_ID}
-          tabIndex={-1}
-          className={classes.aside}
-          p="md"
-          withBorder={false}
-          aria-label={
-            asideTab === "comments"
-              ? t("Comments")
-              : asideTab === "toc"
-                ? t("Table of contents")
-                : asideTab === "chat"
-                  ? t("AI Chat")
-                  : asideTab === "details"
-                    ? t("Details")
-                    : undefined
+          collapsed: {
+            mobile: true,
+            desktop: !desktopOpened,
+          },
+        }}
+        aside={
+          isPageRoute && {
+            width: 350,
+            breakpoint: "sm",
+            collapsed: { mobile: !isAsideOpen, desktop: !isAsideOpen },
           }
+        }
+        padding="md"
+      >
+        <AppShell.Header px="md" className={classes.header}>
+          <AppHeader />
+        </AppShell.Header>
+        {!isMobile && (
+          <AppShell.Navbar
+            className={classes.navbar}
+            withBorder={false}
+            ref={sidebarRef}
+            aria-label={
+              isSpaceRoute
+                ? t("Space navigation")
+                : isSettingsRoute
+                  ? t("Settings navigation")
+                  : isAiRoute
+                    ? t("AI navigation")
+                    : t("Main navigation")
+            }
+          >
+            {isSpaceRoute && (
+              <div
+                className={classes.resizeHandle}
+                onMouseDown={startResizing}
+                role="separator"
+                aria-label={t("Resize sidebar")}
+                aria-orientation="vertical"
+                aria-valuemin={220}
+                aria-valuemax={600}
+                aria-valuenow={sidebarWidth}
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  const widths = {
+                    ArrowLeft: sidebarWidth - 16,
+                    ArrowRight: sidebarWidth + 16,
+                    Home: 220,
+                    End: 600,
+                  };
+                  if (!(event.key in widths)) return;
+                  event.preventDefault();
+                  setSidebarWidth(
+                    Math.min(600, Math.max(220, widths[event.key])),
+                  );
+                }}
+              />
+            )}
+            {sidebarContent}
+          </AppShell.Navbar>
+        )}
+        <Drawer
+          opened={Boolean(isMobile && mobileOpened)}
+          onClose={() => setMobileOpened(false)}
+          title={navigationLabel}
+          position="left"
+          size="min(350px, 100%)"
+          padding={0}
+          styles={{
+            header: { height: 64, paddingInline: 18 },
+            body: { height: "calc(100% - 64px)", padding: 0 },
+          }}
         >
-          <Aside />
-        </AppShell.Aside>
-      )}
-    </AppShell>
+          {isMobile && sidebarContent}
+        </Drawer>
+        <AppShell.Main
+          id={MAIN_CONTENT_ID}
+          tabIndex={-1}
+          className={classes.main}
+        >
+          {isSettingsRoute ? (
+            <Container size={900} pb={80}>
+              {children}
+            </Container>
+          ) : (
+            children
+          )}
+        </AppShell.Main>
+
+        {isPageRoute && (
+          <AppShell.Aside
+            id={ASIDE_PANEL_ID}
+            tabIndex={-1}
+            className={classes.aside}
+            p="md"
+            withBorder={false}
+            aria-label={
+              asideTab === "comments"
+                ? t("Comments")
+                : asideTab === "toc"
+                  ? t("Table of contents")
+                  : asideTab === "chat"
+                    ? t("AI Chat")
+                    : asideTab === "details"
+                      ? t("Details")
+                      : undefined
+            }
+          >
+            <Aside />
+          </AppShell.Aside>
+        )}
+      </AppShell>
     </>
   );
 }
