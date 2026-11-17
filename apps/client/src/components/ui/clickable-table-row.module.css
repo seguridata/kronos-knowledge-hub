@@ -27,3 +27,65 @@
   outline-offset: 2px;
   border-radius: var(--mantine-radius-sm);
 }
+/* Reading lists become stacked records on phones rather than tiny,
+   truncated desktop columns. Links and date metadata remain available. */
+.documentList :global(.mantine-Table-table) {
+  table-layout: fixed;
+}
+.documentList :global(.mantine-Table-td:first-child) {
+  width: 58%;
+}
+.documentList .link {
+  display: block;
+  width: 100%;
+}
+.documentList .link :global(.mantine-Text-root) {
+  font-size: 13px;
+}
+.documentList :global(.mantine-Badge-root) {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+@media (max-width: 48em) {
+  .documentList :global(.mantine-Table-table),
+  .documentList :global(.mantine-Table-tbody) {
+    display: block;
+    width: 100%;
+  }
+  .documentList .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--app-border);
+    gap: 8px 12px;
+  }
+  .documentList .row:last-child {
+    border-bottom: 0;
+  }
+  .documentList :global(.mantine-Table-td) {
+    display: block;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .documentList :global(.mantine-Table-td:first-child) {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .documentList .link :global(.mantine-Group-root) {
+    gap: 10px;
+  }
+  .documentList .link :global(.mantine-Text-root) {
+    -webkit-line-clamp: 2;
+    line-height: 1.6;
+  }
+  .documentList :global(.mantine-Table-td:last-child) {
+    justify-self: end;
+    align-self: center;
+  }
+  .documentList :global(.mantine-Table-td:last-child .mantine-Text-root) {
+    font-size: 10px;
+  }
+}

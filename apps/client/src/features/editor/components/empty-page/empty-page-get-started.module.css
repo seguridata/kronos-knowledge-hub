@@ -1,29 +1,54 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  /* Push the bar to the bottom of the full-height editor container. */
+  gap: 12px;
   margin-top: auto;
-  padding-top: 24px;
-  padding-bottom: 8px;
-  /* Match the content indent used by .byline and .ProseMirror so the bar
-     lines up with the title and paragraph rather than the container edge. */
-  padding-left: 3rem;
-  padding-right: 3rem;
+  padding: 32px 3rem 8px;
+  font-family: Poppins, var(--mantine-font-family);
 
-  @media (max-width: $mantine-breakpoint-sm) {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+  @media (max-width: $mantine-breakpoint-sm) { padding-inline: 1rem; }
+  @media print { display: none; }
 }
 
 .label {
-  font-size: var(--mantine-font-size-sm);
-  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+  font-size: 12px;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--app-text-muted, light-dark(#61615c, #b7b7b0));
 }
 
 .chipRow {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+
+  > button {
+    min-height: 36px;
+    height: auto;
+    padding: 8px 12px;
+    border: 1px solid var(--app-border, light-dark(#deded8, #393939));
+    border-radius: 5px;
+    background: var(--app-surface, light-dark(#fafaf8, #242424));
+    color: light-dark(#191919, #f3f3ef);
+    box-shadow: none;
+
+    @mixin hover {
+      &:not(:disabled):not([data-disabled]) {
+        border-color: light-dark(#74983a, #84bd00);
+        background: light-dark(#edf3df, #29301d);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid light-dark(#537900, #84bd00);
+      outline-offset: 2px;
+    }
+
+    &:disabled, &[data-disabled] {
+      color: var(--app-text-muted, light-dark(#61615c, #b7b7b0));
+      opacity: 0.6;
+    }
+
+    @media (max-width: $mantine-breakpoint-sm) { min-height: 44px; }
+  }
 }

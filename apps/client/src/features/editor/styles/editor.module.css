@@ -1,61 +1,96 @@
-/* Outer tray — the document sits in a machined bezel so the wallpaper
- * frames the sheet instead of cutting through it. */
+/* Keep the sheet open: filters and clipping here trap fixed editor controls. */
 .editorBezel {
-    margin: 48px auto 2rem;
-    padding: 6px;
-    border-radius: 1.75rem;
-    background: light-dark(rgba(25, 37, 22, 0.06), rgba(255, 255, 255, 0.05));
-    border: 1px solid light-dark(rgba(25, 37, 22, 0.08), rgba(255, 255, 255, 0.1));
-    box-shadow:
-        inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.08)),
-        0 28px 72px light-dark(rgba(20, 30, 15, 0.1), rgba(0, 0, 0, 0.42));
+  margin: 32px auto 2rem;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--app-border, light-dark(#deded8, #393939));
+  border-radius: 8px;
+  background: var(--app-surface-raised, light-dark(#fff, #191919));
+  box-shadow: 0 2px 6px light-dark(rgb(25 25 25 / 4%), rgb(0 0 0 / 12%));
+  overflow: visible;
 
-    @media print {
-        margin: 0;
-        padding: 0;
-        border: none;
-        background: transparent;
-        box-shadow: none;
-        border-radius: 0;
-    }
+  @media (max-width: $mantine-breakpoint-sm) {
+    margin-block: 16px 24px;
+    border-radius: 4px;
+  }
+
+  @media print {
+    margin: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
 }
 
-/* Inner glass plate — title, byline and body share one frosted surface. */
 .editor {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: calc(100dvh - var(--app-shell-header-height, 56px) - 120px);
-    padding: 1.75rem 0 3rem;
-    border-radius: calc(1.75rem - 6px);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: calc(100dvh - var(--app-shell-header-height, 64px) - 120px);
+  padding: 2rem 0 3rem;
+  border-radius: inherit;
+  color: light-dark(#191919, #f3f3ef);
+  font-family: Poppins, var(--mantine-font-family);
 
-    /* Beat core.css `[data-mantine-color-scheme] .ProseMirror` so the
-     * opaque editor slabs cannot reappear inside the glass. */
-    :global([data-mantine-color-scheme]) & :global(.ProseMirror) {
-        background-color: transparent;
-    }
+  /* Specificity neutralizes the existing global glass utility. */
+  &:global(.app-glass-surface) {
+    background: var(--app-surface-raised, light-dark(#fff, #191919));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    isolation: auto;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
 
-    @media print {
-        padding: 0;
-        min-height: 0;
-        border-radius: 0;
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border: none !important;
-        box-shadow: none !important;
+    &::after { display: none; }
+  }
+
+  :global([data-mantine-color-scheme]) & :global(.ProseMirror) {
+    background-color: transparent;
+    color: inherit;
+    font-family: inherit;
+  }
+
+  :global(.ProseMirror) {
+    min-width: 0;
+    scroll-margin-top: calc(var(--app-shell-header-height, 64px) + var(--page-header-height, 64px) + 16px);
+
+    > :is(h1, h2, h3, h4, h5, h6) {
+      scroll-margin-top: calc(var(--app-shell-header-height, 64px) + var(--page-header-height, 64px) + 16px);
     }
+  }
+
+  :global([data-fixed-toolbar]) {
+    background: var(--app-surface-raised, light-dark(#fff, #191919));
+    border-color: var(--app-border, light-dark(#deded8, #393939));
+    box-shadow: none;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+    scroll-padding-inline: 8px;
+
+    /* Keep the first controls reachable when the row exceeds the viewport. */
+    > div { flex-shrink: 0; }
+  }
+
+  @media (max-width: $mantine-breakpoint-sm) { padding-block: 1.25rem 2rem; }
+
+  @media print {
+    padding: 0;
+    min-height: 0;
+    border-radius: 0;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
 }
 
 .byline {
-    padding-left: 3rem;
+  padding-inline: 3rem;
+  color: var(--app-text-muted, light-dark(#61615c, #b7b7b0));
+  row-gap: 8px;
 
-    @media (max-width: $mantine-breakpoint-sm) {
-        padding-left: 1rem;
-    }
-
-    @media print {
-        padding-left: 0;
-    }
+  @media (max-width: $mantine-breakpoint-sm) { padding-inline: 1rem; }
+  @media print { padding-inline: 0; }
 }
 

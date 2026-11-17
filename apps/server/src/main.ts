@@ -85,22 +85,6 @@ async function bootstrap() {
   app
     .getHttpAdapter()
     .getInstance()
-    .addContentTypeParser(
-      'application/scim+json',
-      { parseAs: 'string' },
-      (_, body, done) => {
-        try {
-          const json = JSON.parse(body.toString());
-          done(null, json);
-        } catch (err: any) {
-          done(err);
-        }
-      },
-    );
-
-  app
-    .getHttpAdapter()
-    .getInstance()
     .decorateReply('setHeader', function (name: string, value: unknown) {
       this.header(name, value);
     })
@@ -112,7 +96,6 @@ async function bootstrap() {
       const excludedPaths = [
         '/api/auth/setup',
         '/api/health',
-        '/api/billing/stripe/webhook',
         '/api/workspace/check-hostname',
         '/api/sso/google',
         '/api/workspace/create',

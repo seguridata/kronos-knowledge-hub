@@ -1,4 +1,13 @@
-import { Text, Card, rem, Group, Button, Skeleton, Title } from "@mantine/core";
+import {
+  Text,
+  Card,
+  rem,
+  Group,
+  Button,
+  Skeleton,
+  Title,
+  Alert,
+} from "@mantine/core";
 import {
   prefetchSpace,
   useGetSpacesQuery,
@@ -8,7 +17,8 @@ import { Link } from "react-router-dom";
 import classes from "./space-carousel.module.css";
 import { formatMemberCount } from "@/lib";
 import { useTranslation } from "react-i18next";
-import { IconArrowRight } from "@tabler/icons-react";
+import { IconArrowRight, IconLayoutGrid } from "@tabler/icons-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { CustomAvatar } from "@/components/ui/custom-avatar.tsx";
 import { AvatarIconType } from "@/features/attachments/types/attachment.types.ts";
 import CardCarousel from "@/components/ui/card-carousel";
@@ -34,7 +44,9 @@ function SpaceCardSkeleton() {
 
 export default function SpaceCarousel() {
   const { t } = useTranslation();
-  const { data, isPending } = useGetSpacesQuery({ limit: 20 });
+  const { data, isPending, isError, refetch } = useGetSpacesQuery({
+    limit: 20,
+  });
   const shouldReduceMotion = useReducedMotion();
 
   if (isPending) {
@@ -54,14 +66,42 @@ export default function SpaceCarousel() {
     );
   }
 
-  const cards = data?.items.map((space, index) => (
+  if (isError)
+    return (
+      <Alert color="gray" title={t("Unable to load spaces")}>
+        <Text size="sm" mb="sm">
+          {t("Check your connection and try again.")}
+        </Text>
+        <Button size="xs" variant="default" onClick={() => void refetch()}>
+          {t("Try again")}
+        </Button>
+      </Alert>
+    );
+
+  if (!data?.items.length)
+    return (
+      <EmptyState
+        icon={IconLayoutGrid}
+        title={t("No spaces yet")}
+        description={t(
+          "Explore the available spaces to start working with your team.",
+        )}
+        action={
+          <Button component={Link} to="/spaces" variant="default" size="sm">
+            {t("Explore spaces")}
+          </Button>
+        }
+      />
+    );
+
+  const cards = data.items.map((space, index) => (
     <motion.div
       key={space.id}
       initial={shouldReduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{
         duration: 0.25,
-        delay: index * STAGGER_STEP_S,
+        delay: Math.min(index, 4) * STAGGER_STEP_S,
         ease: "easeOut",
       }}
     >
@@ -92,7 +132,13 @@ export default function SpaceCarousel() {
           </Text>
 
           {space.description ? (
-            <Text c="dimmed" size="xs" mt={6} lineClamp={2} className={classes.description}>
+            <Text
+              c="dimmed"
+              size="xs"
+              mt={6}
+              lineClamp={2}
+              className={classes.description}
+            >
               {space.description}
             </Text>
           ) : null}

@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsIn,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -31,6 +32,11 @@ export class SearchDTO {
   @IsOptional()
   @IsNumber()
   offset?: number;
+
+  /** 'hybrid' combina texto + semántica (si hay embeddings configurados). */
+  @IsOptional()
+  @IsIn(['keyword', 'hybrid'])
+  mode?: 'keyword' | 'hybrid';
 }
 
 export class SearchShareDTO extends SearchDTO {

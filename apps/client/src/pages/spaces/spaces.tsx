@@ -8,11 +8,14 @@ import { AllSpacesList } from "@/features/space/components/spaces-page";
 import FavoriteSpacesGrid from "@/features/space/components/spaces-page/favorite-spaces-grid";
 import { usePaginateAndSearch } from "@/hooks/use-paginate-and-search";
 import useUserRole from "@/hooks/use-user-role";
+import PageListSkeleton from "@/components/ui/page-list-skeleton";
+import classes from "@/styles/workspace-page.module.css";
 
 export default function Spaces() {
   const { t } = useTranslation();
   const { isAdmin } = useUserRole();
-  const { search, cursor, goNext, goPrev, handleSearch } = usePaginateAndSearch();
+  const { search, cursor, goNext, goPrev, handleSearch } =
+    usePaginateAndSearch();
 
   const { data, isLoading } = useGetSpacesQuery({
     cursor,
@@ -28,27 +31,41 @@ export default function Spaces() {
         </title>
       </Helmet>
 
-      <Container size={"800"} pt="xl">
-        <Group justify="space-between" mb="xl">
-          <Title order={1} size="h3">{t("Spaces")}</Title>
+      <Container size={1000} className={classes.page}>
+        <div className={classes.header}>
+          <div>
+            <span className={classes.kicker}>{t("Workspace")}</span>
+            <Title order={1} className={classes.title}>
+              {t("Spaces")}
+            </Title>
+            <Text className={classes.description}>
+              {t("A place for every team. Knowledge for everyone.", {
+                defaultValue: "A place for every team. Knowledge for everyone.",
+              })}
+            </Text>
+          </div>
           {isAdmin && <CreateSpaceModal />}
-        </Group>
+        </div>
 
         <FavoriteSpacesGrid />
 
-        <Box>
+        <Box className={classes.surface}>
           <Text size="sm" c="dimmed" mb="md">
             {t("All spaces")}
           </Text>
 
-          <AllSpacesList
-            spaces={data?.items || []}
-            onSearch={handleSearch}
-            hasPrevPage={data?.meta?.hasPrevPage}
-            hasNextPage={data?.meta?.hasNextPage}
-            onNext={() => goNext(data?.meta?.nextCursor)}
-            onPrev={goPrev}
-          />
+          {isLoading ? (
+            <PageListSkeleton />
+          ) : (
+            <AllSpacesList
+              spaces={data?.items || []}
+              onSearch={handleSearch}
+              hasPrevPage={data?.meta?.hasPrevPage}
+              hasNextPage={data?.meta?.hasNextPage}
+              onNext={() => goNext(data?.meta?.nextCursor)}
+              onPrev={goPrev}
+            />
+          )}
         </Box>
       </Container>
     </>

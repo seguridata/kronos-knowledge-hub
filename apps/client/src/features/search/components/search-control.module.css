@@ -1,71 +1,49 @@
 .root {
-    display: flex;
-    align-items: center;
-    min-width: 280px;
-    height: 38px;
-    padding-left: 12px;
-    padding-right: 6px;
-    border-radius: 999px;
-    color: var(--mantine-color-placeholder);
-    border: 1px solid;
-    transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+  display: flex;
+  align-items: center;
+  width: 280px;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding-inline: 12px 8px;
+  border: 1px solid var(--app-border, light-dark(#deded8, #393939));
+  border-radius: 6px;
+  background: var(--app-surface-raised, light-dark(#fff, #242424));
+  color: var(--app-text-muted, light-dark(#61615c, #b7b7b0));
+  font-family: Poppins, var(--mantine-font-family);
 
-    backdrop-filter: var(--app-glass-blur);
-    -webkit-backdrop-filter: var(--app-glass-blur);
+  svg { flex-shrink: 0; }
 
-    @mixin light {
-        border-color: rgba(25, 37, 22, 0.1);
-        background-color: rgba(255, 255, 255, 0.62);
-    }
+  @mixin hover {
+    border-color: light-dark(#8b8b80, #77776e);
+    background: var(--app-surface, light-dark(#fafaf8, #191919));
+  }
 
-    @mixin dark {
-        border-color: rgba(255, 255, 255, 0.1);
-        background-color: rgba(14, 16, 14, 0.48);
-    }
+  &:focus-visible {
+    outline: 2px solid light-dark(#537900, #84bd00);
+    outline-offset: 2px;
+  }
 
-    @mixin hover {
-        border-color: color-mix(in oklch, var(--app-accent-green) 40%, transparent);
-        box-shadow: 0 8px 20px light-dark(rgba(24, 35, 17, 0.06), rgba(0, 0, 0, 0.22));
-    }
-
-    &:focus-visible {
-        outline: 2px solid var(--app-accent-green);
-        outline-offset: 2px;
-    }
-
-    @mixin rtl {
-        padding-left: 6px;
-        padding-right: 12px;
-    }
+  @media (max-width: $mantine-breakpoint-sm) { min-height: 44px; }
 }
 
 .placeholder {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
 }
 
 .shortcut {
-    font-size: 11px;
-    line-height: 1;
-    padding: 5px 8px;
-    border-radius: 999px;
-    border: 1px solid;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    flex-shrink: 0;
-
-    @mixin light {
-        color: var(--mantine-color-gray-7);
-        border-color: var(--mantine-color-gray-2);
-        background-color: var(--mantine-color-gray-0);
-    }
-
-    @mixin dark {
-        color: var(--mantine-color-dark-0);
-        border-color: var(--mantine-color-dark-7);
-        background-color: var(--mantine-color-dark-7);
-    }
+  flex-shrink: 0;
+  padding: 5px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--app-border, light-dark(#deded8, #393939));
+  background: var(--app-surface, light-dark(#f5f5f1, #191919));
+  color: var(--app-text-muted, light-dark(#61615c, #b7b7b0));
+  font-size: 11px;
+  line-height: 1.2;
+  white-space: nowrap;
 }

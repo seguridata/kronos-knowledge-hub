@@ -3,25 +3,55 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  min-width: 0;
+  padding: clamp(32px, 6vh, 56px) 20px;
+  color: light-dark(#191919, #f2f2ee);
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .iconBadge {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 1.15rem;
-  margin-bottom: var(--mantine-spacing-xs);
-  background: light-dark(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.04));
-  border: 1px solid light-dark(var(--mantine-color-gray-3), rgba(255, 255, 255, 0.08));
-  box-shadow:
-    0 0 0 5px light-dark(rgba(25, 37, 22, 0.04), rgba(255, 255, 255, 0.03)),
-    inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.08));
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  margin-bottom: 6px;
+  background: var(--app-surface, light-dark(#fff, #191919));
+  border: 1px solid var(--app-border, light-dark(#e2e3df, #363636));
+  box-shadow: 0 2px 4px rgb(0 0 0 / 3%);
 }
 
 .icon {
-  color: var(--mantine-color-dimmed);
+  color: var(--app-text-muted, light-dark(#64665f, #b5b7ae));
+}
+
+.root > :global(.mantine-Stack-root) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.root > :global(.mantine-Stack-root) > :global(.mantine-Text-root) {
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.root > :global(.mantine-Stack-root) > :global(.mantine-Text-root):nth-of-type(2) {
+  color: var(--app-text-muted, light-dark(#64665f, #b5b7ae));
+}
+
+@media (max-width: 36rem), (max-height: 40rem) {
+  .root {
+    padding: 28px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .iconBadge {
+    animation: none;
+    transition: none;
+  }
 }

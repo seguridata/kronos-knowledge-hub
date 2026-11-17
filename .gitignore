@@ -138,3 +138,9 @@ Onlyreference
 *.code-workspace
 *.ico
 .claude
+
+# Reproducible local redesign QA artifacts
+/output/redesign-qa/
+/output/redesign-build.log
+/output/lint-plugin/
+/output/tanstack-eslint-plugin-query-*.tgz

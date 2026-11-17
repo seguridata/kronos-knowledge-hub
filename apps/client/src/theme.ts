@@ -31,22 +31,19 @@ const overlayTransitionProps = {
 // Spotlight). `light-dark()` is a <color> function only — using it for
 // backdrop-filter makes the declaration invalid and the browser drops the
 // Gaussian blur, leaving a see-through panel. Keep blur as a real filter.
-const glassFilter = "var(--app-glass-blur, blur(24px) saturate(155%))";
+const glassFilter = "none";
 const glassSurfaceStyle = {
-  backgroundColor:
-    "light-dark(rgba(255, 255, 255, 0.88), rgba(14, 16, 14, 0.84))",
+  backgroundColor: "var(--app-surface-raised)",
   backgroundImage: "none",
   backdropFilter: glassFilter,
   WebkitBackdropFilter: glassFilter,
-  border:
-    "1px solid light-dark(rgba(25, 37, 22, 0.1), rgba(255, 255, 255, 0.14))",
-  boxShadow:
-    "inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.12)), 0 18px 48px light-dark(rgba(24, 35, 17, 0.12), rgba(0, 0, 0, 0.45))",
+  border: "1px solid var(--app-border)",
+  boxShadow: "0 20px 60px rgb(0 0 0 / 18%)",
 } as const;
 
 const overlayScrimProps = {
   backgroundOpacity: 0.5,
-  blur: 12,
+  blur: 3,
   color: "#050505",
 } as const;
 
@@ -143,7 +140,7 @@ export const theme = createTheme({
   // Tabs already pins seguridataGreen explicitly) keep working because
   // their own defaultProps/color still win over this theme-level default.
   primaryColor: "seguridataGreen",
-  defaultRadius: 'sm',
+  defaultRadius: "sm",
   components: {
     // Primary actions (e.g. "Create space") default to gray instead of
     // Mantine's default blue, keeping the brand green reserved for the
@@ -319,6 +316,8 @@ export const mantineCssResolver: CSSVariablesResolver = (theme) => ({
     // stays visually distinct from real text while clearing the bar with a
     // safe margin. Affects placeholders across all Mantine inputs.
     "--mantine-color-placeholder": "#686868",
+    "--mantine-color-seguridataGreen-light-color": "#466600",
+    "--mantine-color-anchor": "#466600",
     // Bump variant="light" red text from red.6 (#d43535, 4.17:1 on the
     // 10% red-over-white blended pink background — fails WCAG AA 4.5:1)
     // to red.7 (#bc2727, 5.26:1). Affects every <Button color="red"
@@ -336,6 +335,7 @@ export const mantineCssResolver: CSSVariablesResolver = (theme) => ({
   },
   dark: {
     ...v8CssVariablesResolver(theme).dark,
+    "--mantine-color-anchor": "#b8e568",
     "--mantine-color-dark-light-color": "var(--mantine-color-gray-4)",
     "--mantine-color-dark-light-hover": "var(--mantine-color-default-hover)",
   },

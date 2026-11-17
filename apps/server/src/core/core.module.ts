@@ -23,6 +23,8 @@ import { NotificationModule } from './notification/notification.module';
 import { WatcherModule } from './watcher/watcher.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { SessionModule } from './session/session.module';
+import { ApiKeyModule } from './api-key/api-key.module';
+import { McpModule } from './mcp/mcp.module';
 import { ClsMiddleware } from 'nestjs-cls';
 
 @Module({
@@ -44,6 +46,8 @@ import { ClsMiddleware } from 'nestjs-cls';
     NotificationModule,
     WatcherModule,
     SessionModule,
+    ApiKeyModule,
+    McpModule,
   ],
 })
 export class CoreModule implements NestModule {
@@ -52,7 +56,6 @@ export class CoreModule implements NestModule {
       { path: 'auth/setup', method: RequestMethod.POST },
       { path: 'health', method: RequestMethod.GET },
       { path: 'health/live', method: RequestMethod.GET },
-      { path: 'billing/stripe/webhook', method: RequestMethod.POST },
     ];
 
     consumer

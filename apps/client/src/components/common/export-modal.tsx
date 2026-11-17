@@ -6,7 +6,6 @@ import {
   Select,
   Switch,
   Divider,
-  Tooltip,
   Badge,
 } from "@mantine/core";
 import {
@@ -20,7 +19,6 @@ import { exportSpace } from "@/features/space/services/space-service";
 import { useTranslation } from "react-i18next";
 import { Feature } from "@/ee/features";
 import { useHasFeature } from "@/ee/hooks/use-feature";
-import { useUpgradeLabel } from "@/ee/hooks/use-upgrade-label";
 
 interface ExportModalProps {
   id: string;
@@ -40,10 +38,8 @@ export default function ExportModal({
   const [includeAttachments, setIncludeAttachments] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const { t } = useTranslation();
-  const upgradeLabel = useUpgradeLabel();
   const isDocx = format === ExportFormat.Docx;
   const docxEntitled = useHasFeature(Feature.DOCX_EXPORT);
-  const blockedByLicense = isDocx && !docxEntitled;
 
   const handleExport = async () => {
     setIsExporting(true);
@@ -164,16 +160,9 @@ export default function ExportModal({
             <Button onClick={onClose} variant="default">
               {t("Cancel")}
             </Button>
-            <Tooltip label={upgradeLabel} disabled={!blockedByLicense} withArrow>
-              <Button
-                onClick={handleExport}
-                loading={isExporting}
-                disabled={blockedByLicense}
-                data-disabled={blockedByLicense || undefined}
-              >
-                {t("Export")}
-              </Button>
-            </Tooltip>
+            <Button onClick={handleExport} loading={isExporting}>
+              {t("Export")}
+            </Button>
           </Group>
         </Modal.Body>
       </Modal.Content>
@@ -198,8 +187,8 @@ function ExportFormatSelection({
   const data = [
     { value: "markdown", label: "Markdown" },
     { value: "html", label: "HTML" },
-    ...(includeDocx
-      ? [{ value: "docx", label: "Word (.docx)", disabled: !docxEntitled }]
+    ...(includeDocx && docxEntitled
+      ? [{ value: "docx", label: "Word (.docx)" }]
       : []),
   ];
 

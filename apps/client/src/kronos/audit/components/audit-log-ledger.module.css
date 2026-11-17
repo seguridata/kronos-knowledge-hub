@@ -87,3 +87,38 @@
     display: none;
   }
 }
+.filters {
+  padding: 16px;
+  border: 1px solid var(--app-border);
+  border-radius: 12px;
+  background: var(--app-surface);
+}
+.day {
+  padding: 20px;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  background: var(--app-surface);
+}
+.dayLabel {
+  color: var(--app-accent-ink);
+  border-color: var(--app-border);
+  font-size: 10px;
+  font-weight: 500;
+}
+.row {
+  padding-block: 12px;
+  border-bottom: 1px solid var(--app-border);
+  border-radius: 0;
+}
+.row:last-child {
+  border-bottom: 0;
+}
+@media (max-width: 48em) {
+  .filter {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+  .day {
+    padding: 14px;
+  }
+}

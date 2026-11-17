@@ -6,6 +6,7 @@ import {
   IconFileText,
 } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import ChatInput from "./chat-input";
 import type { ChatAttachment, PageMention } from "../types/ai-chat.types";
 import classes from "../styles/ai-chat.module.css";
@@ -41,21 +42,32 @@ const SUGGESTIONS: Suggestion[] = [
 
 type Props = {
   isStreaming: boolean;
-  onSend: (content: string, mentions: PageMention[], attachments: ChatAttachment[]) => void;
+  onSend: (
+    content: string,
+    mentions: PageMention[],
+    attachments: ChatAttachment[],
+  ) => void;
   onStop: () => void;
 };
 
 export default function ChatEmptyState({ isStreaming, onSend, onStop }: Props) {
   const { t } = useTranslation();
+  const [draftInsertion, setDraftInsertion] = useState<{
+    text: string;
+    id: number;
+  }>();
 
   const handleSuggestionClick = (prompt: string) => {
-    onSend(prompt, [], []);
+    setDraftInsertion((previous) => ({
+      text: t(prompt),
+      id: (previous?.id ?? 0) + 1,
+    }));
   };
 
   return (
     <div className={classes.emptyState}>
       <IconSparkles size={48} stroke={1.5} className={classes.emptyStateIcon} />
-      <div className={classes.emptyStateBrand}>{t("Docmost AI")}</div>
+      <div className={classes.emptyStateBrand}>{t("SeguriData AI")}</div>
       <h1 className={classes.emptyStateTitle}>
         {t("What can I help you with?")}
       </h1>
@@ -67,6 +79,7 @@ export default function ChatEmptyState({ isStreaming, onSend, onStop }: Props) {
           onStop={onStop}
           placeholder={t("Ask anything... Use @ to mention pages")}
           autofocus
+          draftInsertion={draftInsertion}
         />
       </div>
 
@@ -79,9 +92,10 @@ export default function ChatEmptyState({ isStreaming, onSend, onStop }: Props) {
               type="button"
               className={classes.suggestionCard}
               onClick={() => handleSuggestionClick(s.prompt)}
+              disabled={isStreaming}
             >
               <span className={classes.suggestionIcon}>{s.icon}</span>
-              <span className={classes.suggestionText}>{s.text}</span>
+              <span className={classes.suggestionText}>{t(s.text)}</span>
             </button>
           ))}
         </div>

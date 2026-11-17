@@ -1,117 +1,139 @@
 .navbar {
-    height: 100%;
-    width: 100%;
-    padding: var(--mantine-spacing-md);
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(180deg, light-dark(rgba(255,255,255,.12), rgba(255,255,255,.025)), transparent 40%);
+  height: 100%;
+  width: 100%;
+  padding: 20px 14px 14px;
+  display: flex;
+  flex-direction: column;
 }
-
-[data-mantine-color-scheme='dark'] .navbar {
-    border-right: rem(1px) solid rgba(255, 255, 255, 0.08);
+.workspaceIdentity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 22px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--app-border);
 }
-
+.workspaceIcon {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  color: #d4e5b9;
+  background: #28351b;
+}
+.workspaceName {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.workspaceName strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 600;
+}
+.workspaceName small {
+  font-size: 9px;
+  color: var(--app-text-muted);
+}
 .section {
-    padding-bottom: var(--mantine-spacing-xs);
+  padding-bottom: 12px;
 }
-
-.link {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    font-size: var(--mantine-font-size-sm);
-    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
-    padding: .65rem .75rem;
-    border: 1px solid transparent;
-    min-height: 42px;
-    border-radius: .9rem;
-    font-weight: 500;
-    user-select: none;
-    transition: background-color 180ms cubic-bezier(.22,1,.36,1), color 180ms cubic-bezier(.22,1,.36,1), border-color 180ms cubic-bezier(.22,1,.36,1), transform 180ms cubic-bezier(.22,1,.36,1);
-
-    @mixin hover {
-        background-color: light-dark(rgba(132,189,0,.07), rgba(132,189,0,.1));
-        color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-        transform: translateX(2px);
-    }
-
-    &:focus-visible {
-        outline: 2px solid var(--app-accent-green);
-        outline-offset: 2px;
-    }
-
-    &[data-active] {
-        border-color: color-mix(in oklch, var(--app-accent-green) 22%, transparent);
-
-        &,
-        & :hover {
-            background-color: light-dark(rgba(132,189,0,.12), rgba(132,189,0,.14));
-            color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-        }
-    }
-
-    &[data-disabled] {
-        cursor: not-allowed;
-        opacity: 0.5;
-
-        @mixin hover {
-            background-color: transparent;
-            color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
-        }
-    }
-}
-
-.linkIcon {
-    color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
-    margin-right: .75rem;
-    width: rem(16px);
-    height: rem(16px);
-}
-
 .sectionHeader {
-    padding: 1.25rem .75rem .55rem;
-    font-size: var(--mantine-font-size-xs);
-    color: var(--mantine-color-dimmed);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  margin: 0;
+  padding: 18px 12px 9px;
+  color: var(--app-text-muted);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
-
-.spacer {
-    flex: 1;
+.link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  margin-bottom: 3px;
+  border-radius: 9px;
+  color: var(--app-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
 }
-
-.bottomSection {
-    padding-top: var(--mantine-spacing-xs);
-    border-top: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+.linkIcon {
+  margin-right: 11px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke-width: 1.7;
 }
-
+.link[data-active] {
+  background: light-dark(#edf3e3, #2b3620);
+  color: var(--app-accent-ink);
+}
+.link[data-active]::after {
+  content: "";
+  margin-left: auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #84bd00;
+}
 .spaceItem {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: var(--mantine-spacing-sm);
-    text-decoration: none;
-    font-size: var(--mantine-font-size-sm);
-    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
-    padding-left: var(--mantine-spacing-xs);
-    min-height: 30px;
-    border-radius: var(--mantine-radius-sm);
-    transition: background-color 150ms ease, color 150ms ease;
-    font-weight: 500;
-    user-select: none;
-
-    @mixin hover {
-        background-color: light-dark(
-                var(--mantine-color-gray-1),
-                var(--mantine-color-dark-6)
-        );
-        color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-    }
-
-    &:focus-visible {
-        outline: 2px solid var(--app-accent-green);
-        outline-offset: 2px;
-    }
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--app-text-muted);
+}
+.spaceItem p {
+  font-size: 11px;
+}
+.bottomSection {
+  padding-top: 12px;
+  border-top: 1px solid var(--app-border);
+}
+.libraryNote {
+  display: grid;
+  gap: 9px;
+  padding: 16px;
+  margin: 0 4px 15px;
+  border-radius: 12px;
+  color: var(--app-accent-ink);
+  background: var(--app-surface-subtle);
+  text-decoration: none;
+}
+.libraryNote strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+.libraryNote span {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 10px;
+  color: var(--app-text-muted);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link:hover:not([data-active]),
+  .spaceItem:hover {
+    background: var(--app-surface-subtle);
+    color: var(--app-text);
+  }
+}
+@media (max-height: 700px) {
+  .libraryNote {
+    display: none;
+  }
+  .workspaceIdentity {
+    padding-bottom: 12px;
+  }
 }

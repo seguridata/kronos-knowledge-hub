@@ -46,7 +46,7 @@ export default function CreatedByMe({ spaceId }: Props) {
 
   return pages.length > 0 ? (
     <>
-      <Table.ScrollContainer minWidth={500}>
+      <Table.ScrollContainer minWidth={0} className={rowClasses.documentList}>
         <Table highlightOnHover verticalSpacing="sm">
           <Table.Tbody>
             {pages.map((page) => (
@@ -55,11 +55,7 @@ export default function CreatedByMe({ spaceId }: Props) {
                   <UnstyledButton
                     className={rowClasses.link}
                     component={Link}
-                    to={buildPageUrl(
-                      page?.space.slug,
-                      page.slugId,
-                      page.title,
-                    )}
+                    to={buildPageUrl(page?.space.slug, page.slugId, page.title)}
                   >
                     <Group wrap="nowrap">
                       <PageListIcon icon={page.icon} isBase={page.isBase} />

@@ -1,19 +1,46 @@
 .filtersContainer {
   display: flex;
+  align-items: center;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
-  padding: 8px 0;
+  padding: 8px 3px 12px;
+  border-bottom: 1px solid var(--app-border, light-dark(#deded8, #393939));
+  font-family: Poppins, var(--mantine-font-family);
   scrollbar-width: thin;
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: 3px;
+
+  > * { flex-shrink: 0; }
 }
 
 .filterButton {
   white-space: nowrap;
   flex-shrink: 0;
-  font-size: 13px;
-  height: 32px;
-  padding: 0 12px;
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-6));
-  &:hover {
-    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-6));
+  font-size: 12px;
+  min-height: 36px;
+  height: auto;
+  padding: 6px 12px;
+  border: 1px solid var(--app-border, light-dark(#deded8, #393939));
+  border-radius: 5px;
+  background: var(--app-surface, light-dark(#fafaf8, #242424));
+  color: light-dark(#4c4c47, #d3d3cb);
+
+  @mixin hover {
+    background: light-dark(#efefea, #303030);
+    color: light-dark(#191919, #fff);
   }
+
+  &[aria-expanded="true"] {
+    border-color: light-dark(#74983a, #84bd00);
+    background: light-dark(#edf3df, #29301d);
+  }
+
+  &:focus-visible {
+    outline: 2px solid light-dark(#537900, #84bd00);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: $mantine-breakpoint-sm) { min-height: 44px; }
 }

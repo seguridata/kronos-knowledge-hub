@@ -9,6 +9,7 @@ import { getAppName } from "@/lib/config.ts";
 import { Divider } from "@mantine/core";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
+import classes from "@/components/settings/settings-content.module.css";
 
 export default function AccountPreferences() {
   const { t } = useTranslation();
@@ -20,29 +21,35 @@ export default function AccountPreferences() {
           {t("Preferences")} - {getAppName()}
         </title>
       </Helmet>
-      <SettingsTitle title={t("Preferences")} />
+      <div className={classes.content}>
+        <SettingsTitle title={t("Preferences")} />
 
-      <AccountTheme />
+        <AccountTheme />
 
-      <Divider my={"md"} />
+        <Divider my={"md"} />
 
-      <AccountLanguage />
+        <AccountLanguage />
 
-      <Divider my={"md"} />
+        <Divider my={"md"} />
 
-      <PageWidthPref />
-      
-      <Divider my={"md"} />
+        <div className={classes.responsiveRows}>
+          <PageWidthPref />
 
-      <PageEditPref />
+          <Divider my={"md"} />
 
-      <Divider my={"md"} />
+          <PageEditPref />
 
-      <FixedToolbarPref />
+          <Divider my={"md"} />
 
-      <Divider my={"md"} />
+          <FixedToolbarPref />
+        </div>
 
-      <NotificationPref />
+        <Divider my={"md"} />
+
+        <div className={classes.notifications}>
+          <NotificationPref />
+        </div>
+      </div>
     </>
   );
 }

@@ -1,0 +1,150 @@
+/* Kronos / SeguriData shared product materials. */
+:root {
+  --app-canvas: #f6f7f4;
+  --app-surface: #ffffff;
+  --app-surface-raised: #ffffff;
+  --app-surface-subtle: #f0f2ed;
+  --app-border: #e2e6dc;
+  --app-text-muted: #62695c;
+  --app-text: #24291f;
+  --app-radius: 16px;
+  --app-shadow: 0 2px 3px rgb(20 30 12 / 2%), 0 8px 24px rgb(20 30 12 / 3%);
+  --app-accent-ink: #466600;
+}
+/* Explicit selectors are intentional: Mantine's PostCSS light-dark()
+   transform uses a descendant selector, which cannot match :root itself. */
+:root[data-mantine-color-scheme="dark"] {
+  --app-canvas: #111310;
+  --app-surface: #191c18;
+  --app-surface-raised: #22261f;
+  --app-surface-subtle: #20241e;
+  --app-border: #33392e;
+  --app-text-muted: #aeb7a5;
+  --app-text: #f1f4ed;
+  --app-accent-ink: #b8e568;
+}
+html,
+body,
+#root {
+  background: var(--app-canvas);
+}
+body {
+  color: var(--app-text);
+  -webkit-font-smoothing: antialiased;
+}
+body::after {
+  display: none;
+}
+.app-glass-surface,
+.app-glass-surface--thick {
+  background: var(--app-surface);
+  border-color: var(--app-border);
+  box-shadow: var(--app-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.app-glass-surface::after {
+  display: none;
+}
+.app-glass-surface .app-glass-surface {
+  background: var(--app-surface-subtle);
+  box-shadow: none;
+}
+.app-glass {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.mantine-Input-input {
+  border-radius: 10px;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+.mantine-Input-input:focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, #84bd00 13%, transparent);
+}
+.mantine-InputWrapper-label {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.mantine-Button-root {
+  border-radius: 10px;
+  font-weight: 600;
+}
+.mantine-Modal-title,
+.mantine-Drawer-title {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.mantine-Modal-content {
+  border-radius: 18px;
+}
+.mantine-Modal-header {
+  padding-bottom: 20px;
+}
+.mantine-Table-table {
+  --table-border-color: var(--app-border);
+}
+.mantine-Table-th {
+  color: var(--app-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.mantine-Table-td {
+  font-size: 13px;
+}
+.mantine-Tabs-list::before {
+  border-color: var(--app-border);
+}
+.mantine-Tabs-tab {
+  min-height: 44px;
+  font-size: 13px;
+}
+.mantine-Tabs-tab[data-active] {
+  color: var(--app-accent-ink);
+}
+.mantine-Menu-item {
+  min-height: 38px;
+  border-radius: 8px;
+}
+.mantine-ActionIcon-root:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--app-accent-green);
+  outline-offset: 3px;
+}
+@media (max-width: 48em) {
+  .mantine-Modal-body {
+    padding-inline: 16px;
+  }
+  .mantine-Modal-content {
+    max-width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mantine-Input-input {
+    transition: none;
+  }
+}
+@media print {
+  :root,
+  :root[data-mantine-color-scheme] {
+    --app-canvas: #fff;
+    --app-surface: #fff;
+    --app-surface-raised: #fff;
+    --app-text: #191919;
+    --app-text-muted: #62695c;
+    --app-border: #ddd;
+    color-scheme: light;
+  }
+  html,
+  body,
+  #root,
+  .app-glass-surface {
+    background: white;
+  }
+  .ProseMirror {
+    color: #191919 !important;
+    background: white !important;
+  }
+}

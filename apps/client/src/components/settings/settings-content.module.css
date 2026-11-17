@@ -1,0 +1,196 @@
+/* SettingsTitle is also the hook for workspace pages whose shell is shared.
+   Keep these rules local to settings content, away from portaled dialogs. */
+.content,
+:global(.mantine-Container-root):has(> .title) {
+  container: settings-content / inline-size;
+  min-width: 0;
+  padding: clamp(20px, 4vw, 36px);
+  margin-block: 12px 32px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius, 16px);
+  background: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: var(--app-shadow);
+  font-family: Poppins, var(--mantine-font-family);
+
+  :global(.mantine-Divider-root) {
+    border-color: var(--app-border);
+    margin-block: 28px;
+  }
+
+  :global(.mantine-Text-root),
+  :global(.mantine-InputWrapper-description) {
+    overflow-wrap: anywhere;
+  }
+
+  :global(.mantine-InputWrapper-root) {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  :global(.mantine-Input-input) {
+    min-height: 42px;
+    background: var(--app-surface-subtle);
+    color: var(--app-text);
+    border-color: var(--app-border);
+  }
+
+  :global(.mantine-Button-root) {
+    max-width: 100%;
+    min-height: 40px;
+    height: auto;
+    padding-block: 10px;
+  }
+
+  :global(.mantine-Button-label) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  :global(.mantine-Button-inner) {
+    height: auto;
+  }
+
+  /* Match description/control groups, preserving compact badge/icon groups
+     and the layout of rows inside data tables. */
+  .row,
+  :global(.mantine-Group-root):has(> div > :global(.mantine-Text-root)):has(
+      > :is(
+        button,
+        :global(.mantine-InputWrapper-root),
+        :global(.mantine-SegmentedControl-root)
+      )
+    ),
+  :global(.mantine-Group-root):has(> :global(.mantine-Text-root) + button) {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+
+    > :first-child {
+      flex: 1 1 18rem;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    > :not(:first-child) {
+      flex-shrink: 0;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    > :global(.mantine-InputWrapper-root) {
+      flex: 0 1 16rem;
+    }
+
+    @container settings-content (max-width: 640px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+
+      > :first-child,
+      > :not(:first-child),
+      > :global(.mantine-InputWrapper-root) {
+        flex: 0 1 auto;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.title {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--app-border);
+
+  h1 {
+    margin: 0;
+    color: var(--app-text);
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+}
+
+.identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+
+  @container settings-content (max-width: 640px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+
+.row {
+  min-width: 0;
+}
+
+.description {
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.sessions {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
+
+  table {
+    min-width: 480px;
+  }
+}
+
+.mfaSection {
+  min-width: 0;
+
+  :global(.mantine-Group-root) {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  @container settings-content (max-width: 640px) {
+    /* ResponsiveSettingsRow supplies inline flex styles; change only direction
+       here so enabled MFA actions share the same mobile flow as setup. */
+    > div {
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
+    > div > div {
+      flex-basis: auto !important;
+      min-width: 0;
+      max-width: 100%;
+    }
+  }
+}
+
+/* The preference components use ResponsiveSettingsRow with inline flex rules. */
+@container settings-content (max-width: 640px) {
+  .responsiveRows > div,
+  .notifications > div > div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+
+    > div {
+      flex-basis: auto !important;
+      min-width: 0;
+      max-width: 100%;
+    }
+  }
+}
+
+@media (max-width: 48em) {
+  .content,
+  :global(.mantine-Container-root):has(> .title) {
+    padding: 20px 16px;
+    margin-block: 4px 24px;
+    border-radius: 12px;
+  }
+}

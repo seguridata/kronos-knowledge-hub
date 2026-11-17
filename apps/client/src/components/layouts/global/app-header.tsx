@@ -1,6 +1,5 @@
 import {
   ActionIcon,
-  Badge,
   Box,
   Group,
   Text,
@@ -22,8 +21,6 @@ import {
 import { useToggleSidebar } from "@/components/layouts/global/hooks/hooks/use-toggle-sidebar.ts";
 import SidebarToggle from "@/components/ui/sidebar-toggle-button.tsx";
 import { useTranslation } from "react-i18next";
-import useTrial from "@/ee/hooks/use-trial.tsx";
-import { isCloud } from "@/lib/config.ts";
 import {
   SearchControl,
   SearchMobileControl,
@@ -35,9 +32,7 @@ import {
 import { NotificationPopover } from "@/features/notification/components/notification-popover.tsx";
 import { workspaceAtom } from "@/features/user/atoms/current-user-atom.ts";
 
-const links = [
-  { link: APP_ROUTE.HOME, label: "Home" },
-];
+const links = [{ link: APP_ROUTE.HOME, label: "Home" }];
 
 export function AppHeader() {
   const { t } = useTranslation();
@@ -46,7 +41,6 @@ export function AppHeader() {
 
   const [desktopOpened] = useAtom(desktopSidebarAtom);
   const toggleDesktop = useToggleSidebar(desktopSidebarAtom);
-  const { isTrial, trialDaysLeft } = useTrial();
   const location = useLocation();
   const toggleAside = useToggleAside();
   const [workspace] = useAtom(workspaceAtom);
@@ -74,8 +68,14 @@ export function AppHeader() {
 
   return (
     <>
-      <Group h="100%" px="md" justify="space-between" wrap={"nowrap"}>
-        <Group wrap="nowrap">
+      <Group
+        h="100%"
+        justify="space-between"
+        wrap={"nowrap"}
+        gap="sm"
+        className={classes.headerInner}
+      >
+        <Group wrap="nowrap" gap="sm">
           <Tooltip label={t("Sidebar toggle")}>
             <SidebarToggle
               aria-label={t("Sidebar toggle")}
@@ -96,8 +96,12 @@ export function AppHeader() {
             />
           </Tooltip>
 
-          <Link to="/home" className={classes.brand} aria-label="Seguridata">
-            <Box hiddenFrom="sm" className={classes.brandIcon}>
+          <Link
+            to="/home"
+            className={classes.brand}
+            aria-label="SeguriData — Kronos"
+          >
+            <Box className={classes.brandIcon}>
               <img
                 src="/icons/favicon-32x32.png"
                 alt="Seguridata"
@@ -105,17 +109,12 @@ export function AppHeader() {
                 height={22}
               />
             </Box>
-            <Text
-              size="lg"
-              fw={600}
-              style={{ userSelect: "none" }}
-              visibleFrom="sm"
-            >
-              Seguridata
-            </Text>
+            <span className={classes.brandName}>
+              SeguriData<span className={classes.productName}>Kronos</span>
+            </span>
           </Link>
 
-          <Group ml={50} gap={5} className={classes.links} visibleFrom="sm">
+          <Group ml={20} gap={5} className={classes.links} visibleFrom="md">
             {items}
           </Group>
         </Group>
@@ -129,7 +128,7 @@ export function AppHeader() {
           </Group>
         </div>
 
-        <Group px={"xl"} wrap="nowrap">
+        <Group wrap="nowrap" gap="sm" className={classes.accountControls}>
           {aiChatEnabled && (
             <>
               <UnstyledButton
@@ -159,7 +158,12 @@ export function AppHeader() {
                   hiddenFrom="sm"
                   aria-label={t("AI Chat")}
                   onClick={(e: React.MouseEvent) => {
-                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) {
+                    if (
+                      e.metaKey ||
+                      e.ctrlKey ||
+                      e.shiftKey ||
+                      e.button === 1
+                    ) {
                       return;
                     }
                     if (isPageRoute) {
@@ -174,19 +178,6 @@ export function AppHeader() {
             </>
           )}
           <NotificationPopover />
-          {isCloud() && isTrial && trialDaysLeft !== 0 && (
-            <Badge
-              variant="light"
-              style={{ cursor: "pointer" }}
-              component={Link}
-              to={APP_ROUTE.SETTINGS.WORKSPACE.BILLING}
-              visibleFrom="xs"
-            >
-              {trialDaysLeft === 1
-                ? "1 day left"
-                : `${trialDaysLeft} days left`}
-            </Badge>
-          )}
           <TopMenu />
         </Group>
       </Group>

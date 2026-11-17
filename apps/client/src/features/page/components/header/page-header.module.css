@@ -1,36 +1,31 @@
 .header {
-  height: 56px;
-  background-color: light-dark(rgba(250, 252, 248, 0.84), rgba(14, 16, 14, 0.82));
-  backdrop-filter: var(--app-glass-blur, blur(12px) saturate(160%));
-  -webkit-backdrop-filter: var(--app-glass-blur, blur(12px) saturate(160%));
-  border-bottom: 1px solid light-dark(rgba(28, 38, 30, 0.08), rgba(255, 255, 255, 0.1));
-  padding-left: var(--mantine-spacing-md);
-  padding-right: var(--mantine-spacing-md);
+  height: var(--page-header-height, 64px);
+  background: var(--app-surface-raised, light-dark(#fff, #191919));
+  color: light-dark(#191919, #f3f3ef);
+  border-bottom: 1px solid var(--app-border, light-dark(#deded8, #393939));
+  padding-inline: var(--mantine-spacing-md);
+  font-family: Poppins, var(--mantine-font-family);
   position: fixed;
   z-index: 99;
   top: var(--app-shell-header-offset, 0rem);
   inset-inline-start: var(--app-shell-navbar-offset, 0rem);
   inset-inline-end: var(--app-shell-aside-offset, 0rem);
 
-  @media (max-width: $mantine-breakpoint-sm) {
-    padding-left: var(--mantine-spacing-xs);
-    padding-right: var(--mantine-spacing-xs);
-  }
-
-  @media print {
-    display: none;
-  }
-
-  @media (prefers-reduced-transparency: reduce) {
-    background-color: light-dark(#f6f8f4, var(--mantine-color-dark-8));
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
+  @media (max-width: $mantine-breakpoint-sm) { padding-inline: 8px; }
+  @media print { display: none; }
 }
 
 .group {
+  min-width: 0;
+  gap: 12px;
+
+  > :last-child {
+    flex-shrink: 0;
+    padding-inline: 0;
+  }
+
   @media (max-width: $mantine-breakpoint-sm) {
-    gap: var(--mantine-spacing-sm);
+    gap: 6px;
     padding-inline: 0 !important;
   }
 }
